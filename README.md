@@ -1,2 +1,1 @@
-EMS_UI
-React project for EMS.
+# EMS_UI
