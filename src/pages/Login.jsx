@@ -15,19 +15,33 @@ const Login = () => {
   const [error, setError] = useState(''); // To handle login errors
 
   const handleLogin = () => {
-    // Fetch user data from the mock API (json-server)
-    fetch('http://localhost:5000/users')
+    // Send login request to the server with username and password
+    fetch('http://localhost:5000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    })
       .then((response) => response.json())
       .then((data) => {
-        // Check if the user credentials match any user in the mock API
-        const user = data.find(
-          (user) => user.username === username && user.password === password
-        );
-        if (user) {
-          login(user); // If credentials are correct, log in the user
-          navigate('/dashboard'); // Redirect to dashboard page
+        if (data.token) {
+          // Save the JWT token in localStorage
+          localStorage.setItem('authToken', data.token);
+
+          // Optionally store user data (like username, email, etc.) in localStorage
+          localStorage.setItem('user', JSON.stringify(data.user));
+
+          // Login the user by storing user data in the context (if you use context for global state)
+          login(data.user);
+
+          // Redirect to dashboard
+          navigate('/dashboard');
         } else {
-          setError('Invalid credentials'); // Show error if credentials don't match
+          setError('Invalid credentials'); // Show error if no token is returned
         }
       })
       .catch((err) => {
