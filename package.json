@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start-api": "json-server --watch db.json --port 5000"
+    "start-api": "json-server --watch db.json --port 5000",
+    "mock-server": "node src/mock-server/json-server.js"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -17,6 +18,8 @@
     "@mui/material": "^7.0.2",
     "antd": "^5.24.7",
     "axios": "^1.8.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "json-server-auth": "^2.1.0",
     "jsonwebtoken": "^9.0.2",

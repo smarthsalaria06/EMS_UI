@@ -37,14 +37,14 @@ const AppContent = () => {
    {/* Show theme toggle on all pages except login */}
 
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
 
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
+         
               <Dashboard />
-            </ProtectedRoute>
+  
           }
         >
           <Route path="home" element={<Home />} />

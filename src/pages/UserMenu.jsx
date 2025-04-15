@@ -39,7 +39,7 @@ const UserMenu = ({ anchorEl, open, onClose, user, onLogout }) => {
           className: 'menu-animation'
         }}
       >
-        {/* Email */}
+        {/* Display email */}
         <MenuItem disabled>
           <ListItemIcon>
             <EmailIcon fontSize="small" />
@@ -61,7 +61,7 @@ const UserMenu = ({ anchorEl, open, onClose, user, onLogout }) => {
 
         <Divider />
 
-        {/* About */}
+        {/* About Section */}
         <MenuItem onClick={handleAboutOpen}>
           <ListItemIcon>
             <InfoIcon fontSize="small" />
@@ -71,7 +71,7 @@ const UserMenu = ({ anchorEl, open, onClose, user, onLogout }) => {
 
         <Divider />
 
-        {/* Logout */}
+        {/* Logout Section */}
         <MenuItem onClick={onLogout}>
           <ListItemIcon>
             <LogoutIcon fontSize="small" />

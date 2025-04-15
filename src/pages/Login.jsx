@@ -16,38 +16,42 @@ const Login = () => {
 
   const handleLogin = () => {
     // Send login request to the server with username and password
-    fetch('http://localhost:5000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.token) {
-          // Save the JWT token in localStorage
-          localStorage.setItem('authToken', data.token);
-
-          // Optionally store user data (like username, email, etc.) in localStorage
-          localStorage.setItem('user', JSON.stringify(data.user));
-
-          // Login the user by storing user data in the context (if you use context for global state)
-          login(data.user);
-
-          // Redirect to dashboard
-          navigate('/dashboard');
-        } else {
-          setError('Invalid credentials'); // Show error if no token is returned
-        }
-      })
-      .catch((err) => {
-        console.error('Error logging in:', err);
-        setError('Something went wrong. Please try again later.');
+    console.log('Logging in with:', { username, password });
+  fetch('http://localhost:5000/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: username,
+      password: password,
+    }),
+  })
+  .then((response) => {
+    if (!response.ok) {
+      console.log("Raw Response:", response);
+      return response.json().then(err => {
+        throw new Error(err.message || 'Invalid credentials');
       });
+    }
+    return response.json();
+  })
+  .then((data) => {
+    if (data.success) {
+      console.log("Parsed Data:", data);
+      
+      login(data.user, data.token); // ✅ Pass both user and token
+
+      navigate('/dashboard');
+    } else {
+      setError(data.message || 'Login failed'); // Show backend error message
+    }
+  })
+  .catch((err) => {
+    console.error('Login failed:', err);
+    setError(err.message || 'Something went wrong. Please try again later.');
+  });
+  
   };
 
   // Toggle password visibility

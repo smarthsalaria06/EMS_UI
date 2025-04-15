@@ -7,30 +7,61 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const storedUser = JSON.parse(localStorage.getItem('user'));
-  const storedTheme = localStorage.getItem('theme') || 'light';
+  // Safely parse stored user data
+  const storedUser = (() => {
+    try {
+      return JSON.parse(sessionStorage.getItem('user'));
+    } catch (err) {
+      console.error("Error parsing stored user data:", err);
+      return null;
+    }
+  })();
 
+  const storedToken = sessionStorage.getItem('authToken');
+  const storedTheme = sessionStorage.getItem('theme') || 'light';
+
+  // States to manage user, token, and theme
   const [user, setUser] = useState(storedUser);
+  const [token, setToken] = useState(storedToken);
   const [themeMode, setThemeMode] = useState(storedTheme);
 
-  // Toggle theme mode between 'light' and 'dark'
-  const toggleTheme = () => {
-    const newTheme = themeMode === 'light' ? 'dark' : 'light';
-    setThemeMode(newTheme);
+  // Function to log in (set user and token)
+  const login = (userData, authToken) => {
+    setUser(userData);
+    setToken(authToken);
   };
 
-  // Save theme preference
+  // Function to log out (clear user and token)
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+    sessionStorage.clear(); // Clears all session data
+  };
+
+  // Sync theme mode to sessionStorage
   useEffect(() => {
-    localStorage.setItem('theme', themeMode);
+    sessionStorage.setItem('theme', themeMode);
   }, [themeMode]);
 
-  // Save user info
+  // Sync user to sessionStorage
   useEffect(() => {
-    if (user) localStorage.setItem('user', JSON.stringify(user));
-    else localStorage.removeItem('user');
+    if (user) {
+      sessionStorage.setItem('user', JSON.stringify(user));
+    } else {
+      sessionStorage.removeItem('user');
+    }
   }, [user]);
 
-  // MUI dynamic theme object
+  // Sync token to sessionStorage
+  useEffect(() => {
+    if (token) {
+      sessionStorage.setItem('authToken', token);
+    } else {
+      sessionStorage.removeItem('authToken');
+    }
+  }, [token]);
+
+  // MUI theme setup based on current theme mode (light or dark)
   const muiTheme = useMemo(() => createTheme({
     palette: {
       mode: themeMode,
@@ -53,8 +84,21 @@ export const AuthProvider = ({ children }) => {
     },
   }), [themeMode]);
 
+  // Toggle between light and dark theme
+  const toggleTheme = () => {
+    const newTheme = themeMode === 'light' ? 'dark' : 'light';
+    setThemeMode(newTheme);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login: setUser, logout: () => setUser(null), theme: themeMode, toggleTheme }}>
+    <AuthContext.Provider value={{
+      user,
+      token,
+      login,
+      logout,
+      theme: themeMode,
+      toggleTheme,
+    }}>
       <ThemeProvider theme={muiTheme}>
         {children}
       </ThemeProvider>

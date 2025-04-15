@@ -11,15 +11,34 @@ import { Outlet } from 'react-router-dom';
 import ThemeToggle from '../components/ThemeToggle'; // Import ThemeToggle
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth(); // Assuming you have a logout function in AuthContext
   const [anchorEl, setAnchorEl] = useState(null);
   const [theme, setTheme] = useState('light'); // Manage theme state here
 
   const navigate = useNavigate();
 
+  // Redirect if no valid token found
+  useEffect(() => {
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
   const handleAvatarClick = (event) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
-  const handleLogout = () => navigate('/');
+
+  const handleLogout = () => {
+    // Clear sessionStorage data
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('user');
+    
+    // Call logout function from AuthContext to reset the global state
+    logout();
+
+    // Redirect to login page
+    navigate('/login');
+  };
 
   const getInitials = (name) => {
     if (!name) return 'U';
