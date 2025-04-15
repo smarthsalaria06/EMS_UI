@@ -1,0 +1,9 @@
+/* src/pages/AboutPage.css */
+.about-dialog-paper {
+    min-width: 320px;
+    max-width: 400px;
+    border-radius: 12px;
+    padding: 8px;
+    background-color: #fefefe;
+  }
+  

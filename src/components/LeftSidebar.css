@@ -1,0 +1,51 @@
+.left-menu {
+    width: 175px; /* Increased sidebar width */
+    background: #1c1e24;
+    color: #fff;
+    padding: 20px;
+    border-right: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: auto;
+    position: sticky;
+    top: 0;
+  }
+  
+  .left-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .left-menu li {
+    padding: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 6px;
+    transition: background 0.3s;
+  }
+  
+  .left-menu li:hover {
+    background: #3a3d47;
+  }
+  
+  .left-menu .menu-header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  
+  .left-menu .active {
+    background-color: #4CAF50;
+    color: #fff;
+  }
+  h4{
+    font-size: 18px;
+    margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1px;
+    padding: 0px;
+  }

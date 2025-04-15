@@ -1,0 +1,37 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "admin",
+      "name": "Admin ",
+      "email": "admin@example.com"
+    },
+    {
+      "id": "2",
+      "username": "smarth",
+      "password": "admin",
+      "name": "Smarth ",
+      "email": "smarth.salaria@anvipower.com"
+    },
+    {
+      "id": "a9dd",
+      "name": "sam",
+      "email": "sam",
+      "role": "",
+      "username": "asm",
+      "password": "adds"
+    },
+    {
+      "id": "4388",
+      "username": "1234",
+      "password": "1234",
+      "name": "12",
+      "email": "12",
+      "role": "admin",
+      "access": [
+        "dashboard"
+      ]
+    }
+  ]
+}

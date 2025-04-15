@@ -1,0 +1,209 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Top Bar */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: #f5f7fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.logo-container img {
+  height: 40px;
+}
+
+.software-name h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+}
+
+/* Main Layout */
+.main-layout {
+  display: flex;
+  flex: 1;
+  padding: 20px;
+  gap: 20px; /* Space between the sections */
+}
+
+/* Left Menu */
+.left-menu {
+  width: 200px;
+  background: #eef1f6;
+  padding: 20px;
+  border-right: 1px solid #ccc;
+}
+
+.left-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.left-menu li {
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+/* Center Content */
+.center-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Right Sidebar */
+.right-sidebar {
+  width: 260px;
+  background: #f9fafc;
+  padding: 20px;
+  border-left: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Metric Cards */
+.metrics {
+  margin-bottom: 20px;
+}
+
+.metric-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.metric-card .CircularProgressbar {
+  width: 80px; /* Set the size of the circular gauge */
+  height: 80px; /* Ensure it remains circular */
+}
+
+/* Operation Mode Section */
+.operation-mode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.operation-mode .metric-card {
+  width: 100%; /* Make it fully stretched */
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Parameters in Two Columns */
+.two-column-params {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 20px; /* Space between the columns */
+}
+
+.two-column-params .metric-card {
+  width: 100%; /* Ensure it stretches to fill each column */
+}
+
+/* Alarms */
+.alarm-list {
+  margin-top: auto;
+}
+
+.alarm-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.alarm-dot {
+  width: 8px;
+  height: 8px;
+  background: red;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+}
+
+/* Blink animation */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+/* Operation Mode - Fully stretched */
+.operation-mode {
+  width: 100%;
+  text-align: center;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Two Columns for Parameters */
+.two-column-params {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.metric-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 48%; /* Adjust the width to ensure it takes up half the space */
+}
+
+/* Active Alarms */
+.alarm-list {
+  margin-top: auto;
+}
+
+.alarm-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.alarm-dot {
+  width: 8px;
+  height: 8px;
+  background: red;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+/* In Dashboard.css */
+.negative-gauge path {
+  stroke: #FF0000; /* Red color for negative values */
+}
+
+.positive-gauge path {
+  stroke: #4CAF50; /* Green color for positive values */
+}
+
+.company-logo {
+  size-adjust: auto;
+}

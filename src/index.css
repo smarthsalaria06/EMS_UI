@@ -1,0 +1,133 @@
+/* =======================
+   Global Base Styles
+========================== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: #fff;
+  color: #000;
+}
+
+/* =======================
+   Theme Styles
+========================== */
+body[data-theme='dark'],
+body.dark-theme {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+body[data-theme='light'] {
+  background-color: #fff;
+  color: #000;
+}
+
+/* =======================
+   Layout & Backgrounds
+========================== */
+.background {
+  background-color: #f1f1f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(200, 200, 200, 0.8) 100%);
+  z-index: -1;
+}
+
+/* =======================
+   Animations
+========================== */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-background {
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* =======================
+   UI Elements
+========================== */
+button {
+  transition: background-color 0.3s ease;
+}
+
+/* Dashboard top bar */
+[data-theme='dark'] .top-bar {
+  background-color: #222;
+  color: #fff;
+}
+
+[data-theme='light'] .top-bar {
+  background-color: #f9f9f9;
+  color: #000;
+}
+
+/* Sidebar styling */
+[data-theme='dark'] .left-menu {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+[data-theme='light'] .left-menu {
+  background-color: #ffffff;
+  color: #000;
+}
+
+/* Sidebar menu hover effect */
+.left-menu li:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* LiveMetrics panel */
+[data-theme='dark'] .right-sidebar {
+  background-color: #2b2b2b;
+  color: #fff;
+}
+
+[data-theme='light'] .right-sidebar {
+  background-color: #f4f4f4;
+  color: #000;
+}
+
+/* Theme toggle button position remains same; icon color is auto-adjusted */
+[data-theme='dark'] .MuiIconButton-root {
+  color: #fff;
+}
+
+[data-theme='light'] .MuiIconButton-root {
+  color: #000;
+}
+

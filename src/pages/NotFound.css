@@ -1,0 +1,149 @@
+/* Background + Layout */
+.notfound-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+    height: 100vh;
+    padding: 2rem;
+    animation: fadeInPage 1s ease-in-out;
+  }
+  
+  .notfound-container.light {
+    background: linear-gradient(135deg, #f5f8fa, #ddeaf6);
+  }
+  
+  .notfound-container.dark {
+    background: linear-gradient(135deg, #1b1f27, #2a2f3a);
+  }
+  
+  /* Not Found Box */
+  .notfound-box {
+    padding: 3rem 4rem;
+    border-radius: 16px;
+    background-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    animation: slideUp 0.8s ease-in-out;
+    text-align: center;
+  }
+  
+  .notfound-container.dark .notfound-box {
+    background-color: rgba(34, 40, 49, 0.9);
+    color: #eee;
+  }
+  
+  .notfound-title {
+    font-size: 6rem;
+    margin-bottom: 0.5rem;
+    color: #2a3d66;
+  }
+  
+  .notfound-container.dark .notfound-title {
+    color: #70a1ff;
+  }
+  
+  .notfound-text {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .notfound-container.dark .notfound-text {
+    color: #ccc;
+  }
+  
+  .notfound-button {
+    padding: 0.75rem 1.5rem;
+    background-color: #2a3d66;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+  
+  .notfound-button:hover {
+    background-color: #1c2d4a;
+  }
+  
+  /* Ghost Animation */
+  .ghost-wrapper {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    animation: floatGhost 3s ease-in-out infinite;
+  }
+  
+  .ghost {
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+  
+  .face {
+    position: absolute;
+    top: 30%;
+    left: 25%;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+  
+  .eye {
+    width: 10px;
+    height: 10px;
+    background: #000;
+    border-radius: 50%;
+  }
+  
+  .eye.right {
+    margin-left: 10px;
+  }
+  
+  .mouth {
+    width: 20px;
+    height: 5px;
+    background: #000;
+    border-radius: 10px;
+    margin: 10px auto 0;
+  }
+  
+  /* Animation Keyframes */
+  @keyframes slideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInPage {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes floatGhost {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+  .company-logo {
+    width: 200px;
+    height: 70px;
+  }
+  
+  
