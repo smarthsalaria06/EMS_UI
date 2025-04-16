@@ -42,9 +42,9 @@ const AppContent = () => {
         <Route
           path="/dashboard"
           element={
-         
+          
               <Dashboard />
-  
+         
           }
         >
           <Route path="home" element={<Home />} />

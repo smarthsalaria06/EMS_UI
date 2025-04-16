@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Divider } from '@mui/material';
+import { Box, Typography, Divider, Button, Modal } from '@mui/material';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import '../pages/Dashboard.css';
+import OperationMode from './OperationMode'; // ✅ Import your OperationMode component
 
 const LiveMetrics = ({ theme }) => {
   const [metrics, setMetrics] = useState([]);
   const [alarms, setAlarms] = useState([]);
+  const [openModal, setOpenModal] = useState(false); // ✅ Modal state
 
-  // Debugging: Check if theme is passed correctly
   useEffect(() => {
     console.log("Current Theme:", theme);
   }, [theme]);
 
-  // Set dynamic background and text colors based on the current theme
-  const pageBgColor = theme === 'dark' ? '#121212' : '#fafafa'; // Page background color
-  const textColor = theme === 'dark' ? '#ffffff' : '#000000'; // Text color
-  const cardBgColor = theme === 'dark' ? '#2e2e2e' : '#ffffff'; // Metric card background
-  const headerBgColor = theme === 'dark' ? '#424242' : '#f5f5f5'; // Header background color
-  const alarmTextColor = theme === 'dark' ? '#e0e0e0' : '#333333'; // Alarm text color
+  const pageBgColor = theme === 'dark' ? '#121212' : '#fafafa';
+  const textColor = theme === 'dark' ? '#ffffff' : '#000000';
+  const cardBgColor = theme === 'dark' ? '#2e2e2e' : '#ffffff';
+  const alarmTextColor = theme === 'dark' ? '#e0e0e0' : '#333333';
 
   useEffect(() => {
     let timeline = [];
@@ -46,20 +45,73 @@ const LiveMetrics = ({ theme }) => {
   }, []);
 
   return (
-    <div style={{ color: textColor, height: 'auto' }}>
+    <div style={{ color: textColor, height: 'auto', alignContent: "center" }}>
       <Typography variant="h5" gutterBottom style={{ color: textColor }}>Live Metrics</Typography>
 
-      {/* Operation Mode */}
+      {/* ✅ Entire Operation Mode Card as a Button */}
       <Box
+        onClick={() => setOpenModal(true)}
         className="metric-card operation-mode"
-        style={{ backgroundColor: cardBgColor }}
+        style={{
+          backgroundColor: cardBgColor,
+          cursor: 'pointer',
+          transition: '0.3s',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+          ':hover': {
+            boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+          }
+        }}
       >
         <Typography variant="body2" style={{ color: textColor }}>Operation Mode</Typography>
-        <Typography variant="h6" style={{ color: textColor }}>{metrics.operationMode || 'N/A'}</Typography>
+        <Typography 
+          variant="h6" 
+          style={{ 
+            color: textColor, 
+            fontWeight: 'bold',
+            marginTop: '4px',
+            textTransform: 'uppercase' 
+          }}
+        >
+          {metrics.operationMode || 'N/A'}
+        </Typography>
       </Box>
 
-      {/* Power Metrics */}
-      <div className="two-column-params">
+
+      {/* ✅ Modal for Operation Mode */}
+      <Modal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        aria-labelledby="operation-mode-modal"
+        aria-describedby="operation-mode-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '80%',
+            maxWidth: 600,
+            bgcolor: theme === 'dark' ? '#2e2e2e' : 'white',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            color: textColor,
+          }}
+        >
+          <Typography variant="h6" id="operation-mode-modal" gutterBottom>
+            Operation Mode Details
+          </Typography>
+          <OperationMode />
+        </Box>
+      </Modal>
+
+
+      {/* 👇 Remaining metrics and alarms are unchanged */}
+      {/* ... [rest of your code continues unchanged] */}
+    {/* Power Metrics */}
+    <div className="two-column-params">
         <Box className="metric-card" style={{ backgroundColor: cardBgColor }}>
           <Typography variant="body2" style={{ color: textColor }}>Active Power (P)</Typography>
           <CircularProgressbar

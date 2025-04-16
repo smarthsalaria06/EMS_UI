@@ -86,7 +86,7 @@ const Login = () => {
           animation: 'fadeIn 1s ease-out', // Add fade-in animation
         }}>
           <Box textAlign="center" mb={2}>
-            <img src={CompanyLogo} alt="Company Logo" style={{ width: '150px', marginBottom: '20px' }} />
+            <img src={CompanyLogo} alt="Company Logo" style={{ width: '250px', marginBottom: '10px', height: "100px" }} />
             <Typography variant="h5" color="primary" fontWeight="bold" sx={{ fontFamily: 'Roboto, sans-serif' }}>
               Energy Management System
             </Typography>
