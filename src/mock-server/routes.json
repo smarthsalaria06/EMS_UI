@@ -1,4 +1,6 @@
 {
-    "/api/users": "/users"
-  }
-  
+  "login": "/login",
+  "dashboard": "/dashboard",
+  "users": "/users",
+  "fallback": "/"
+}

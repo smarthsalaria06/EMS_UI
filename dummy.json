@@ -132,10 +132,61 @@
     }
   ],
   "alarms": [
-    { "message": "Battery Temperature High" },
-    { "message": "Grid Voltage Low" },
-    { "message": "PCS Communication Lost" },
-    { "message": "Cell Undervoltage Detected" },
-    { "message": "High Inverter Temperature" }
+    {
+      "id": "1",
+      "message": "PCS-01 High voltage detected",
+      "priority": "high",
+      "acknowledged": false,
+      "timestamp": "2025-04-16T10:00:00Z"
+    },
+    {
+      "id": "2",
+      "message": "BESS-Container-02 temperature warning",
+      "priority": "medium",
+      "acknowledged": true,
+      "timestamp": "2025-04-16T09:45:00Z"
+    },
+    {
+      "id": "3",
+      "message": "Fire alarm triggered in Inverter Room",
+      "priority": "high",
+      "acknowledged": false,
+      "timestamp": "2025-04-16T09:30:00Z"
+    },
+    {
+      "id": "4",
+      "message": "Low battery level in Backup System",
+      "priority": "low",
+      "acknowledged": true,
+      "timestamp": "2025-04-16T08:55:00Z"
+    },
+    {
+      "id": "5",
+      "message": "Grid frequency deviation detected",
+      "priority": "medium",
+      "acknowledged": false,
+      "timestamp": "2025-04-16T08:40:00Z"
+    },
+    {
+      "id": "6",
+      "message": "PCS-02 temperature sensor disconnected",
+      "priority": "low",
+      "acknowledged": false,
+      "timestamp": "2025-04-16T08:30:00Z"
+    },
+    {
+      "id": "7",
+      "message": "Power Factor below threshold at PCC",
+      "priority": "medium",
+      "acknowledged": true,
+      "timestamp": "2025-04-16T07:45:00Z"
+    },
+    {
+      "id": "8",
+      "message": "Battery Rack-3 insulation fault",
+      "priority": "high",
+      "acknowledged": false,
+      "timestamp": "2025-04-16T07:00:00Z"
+    }
   ]
 }

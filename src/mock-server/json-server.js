@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
-import jwt from 'jsonwebtoken';  // Adding JWT for token generation
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();  // Load environment variables from .env file
@@ -17,9 +17,11 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
-// Path to the db.json file
+// Path to the db.json file and routes.json file
 const dbPath = path.join(__dirname, '../../db.json');
+const routesPath = path.join(__dirname, 'routes.json');
 let dbData = {};
+let routes = {};
 
 // Load mock data from db.json
 try {
@@ -30,8 +32,17 @@ try {
   console.error('❌ Failed to load db.json', err);
 }
 
+// Load routes from routes.json
+try {
+  const rawRoutes = fs.readFileSync(routesPath, 'utf-8');
+  routes = JSON.parse(rawRoutes);
+  console.log('✅ Routes loaded from routes.json');
+} catch (err) {
+  console.error('❌ Failed to load routes.json', err);
+}
+
 // ----------------- Login Route -----------------
-app.post('/login', (req, res) => {
+app.post(routes.login, (req, res) => {
   const { username, password } = req.body;
   console.log('Login request received with:', { username, password });
 
@@ -62,29 +73,37 @@ app.post('/login', (req, res) => {
 
 // ------------- Middleware for Token Validation -------------
 const verifyToken = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1];  // Extract token from "Authorization: Bearer <token>"
+  const token = req.headers['authorization']?.split(' ')[1];
+  console.log('Token received:', token); // Debugging line
 
   if (!token) {
     return res.status(403).json({ success: false, message: 'Token is missing' });
   }
 
-  // Verify the JWT token
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       return res.status(403).json({ success: false, message: 'Invalid token' });
     }
     req.user = decoded;  // Store the decoded user data in the request object
+    console.log('Decoded token:', decoded); // Debugging line
     next();
   });
 };
 
+
 // ------------- Protected Route (example: dashboard) -------------
-app.get('/dashboard', verifyToken, (req, res) => {
+app.get(routes.dashboard, verifyToken, (req, res) => {
   res.json({ success: true, message: 'Welcome to the dashboard!', user: req.user });
 });
 
+// ------------- User Management Route (for Admin UI) -------------
+app.get(routes.users, verifyToken, (req, res) => {
+  const usersWithoutPasswords = dbData.users.map(({ password, ...user }) => user);
+  res.json(usersWithoutPasswords);
+});
+
 // ------------- Fallback Route -------------
-app.get('/', (req, res) => {
+app.get(routes.fallback, (req, res) => {
   res.send('Mock EMS API running ✅');
 });
 

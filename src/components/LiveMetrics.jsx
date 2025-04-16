@@ -27,10 +27,10 @@ const LiveMetrics = ({ theme }) => {
       .then((res) => res.json())
       .then((data) => {
         timeline = data.metricsTimeline || [];
-        setAlarms(data.alarms || []);
+        setAlarms(data.alarms || []);  // Save alarms to state
 
         if (timeline.length > 0) {
-          setMetrics(timeline[0]);
+          setMetrics(timeline[0]); // Set initial metrics
         }
 
         const interval = setInterval(() => {
@@ -76,7 +76,6 @@ const LiveMetrics = ({ theme }) => {
         </Typography>
       </Box>
 
-
       {/* ✅ Modal for Operation Mode */}
       <Modal
         open={openModal}
@@ -107,11 +106,8 @@ const LiveMetrics = ({ theme }) => {
         </Box>
       </Modal>
 
-
-      {/* 👇 Remaining metrics and alarms are unchanged */}
-      {/* ... [rest of your code continues unchanged] */}
-    {/* Power Metrics */}
-    <div className="two-column-params">
+      {/* Power Metrics */}
+      <div className="two-column-params">
         <Box className="metric-card" style={{ backgroundColor: cardBgColor }}>
           <Typography variant="body2" style={{ color: textColor }}>Active Power (P)</Typography>
           <CircularProgressbar
@@ -181,9 +177,9 @@ const LiveMetrics = ({ theme }) => {
 
       <Divider sx={{ my: 2 }} />
 
-      {/* Active Alarms */}
-      <div className="alarm-list">
-        <Typography variant="h5" style={{ color: textColor }}>Active Alarms</Typography>
+      {/* Active Alarms with Scrollable Container */}
+      <Typography variant="h5" style={{ color: textColor }}>Active Alarms</Typography>
+      <div className="alarm-list" style={{ maxHeight: '100px', overflowY: 'auto', paddingRight: '10px' }}>
         {alarms.length === 0 ? (
           <Typography variant="body2" style={{ color: alarmTextColor }}>No active alarms</Typography>
         ) : (

@@ -17,40 +17,44 @@ const Login = () => {
   const handleLogin = () => {
     // Send login request to the server with username and password
     console.log('Logging in with:', { username, password });
-  fetch('http://localhost:5000/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      username: username,
-      password: password,
-    }),
-  })
-  .then((response) => {
-    if (!response.ok) {
-      console.log("Raw Response:", response);
-      return response.json().then(err => {
-        throw new Error(err.message || 'Invalid credentials');
-      });
-    }
-    return response.json();
-  })
-  .then((data) => {
-    if (data.success) {
-      console.log("Parsed Data:", data);
+  
+    fetch('http://localhost:5000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    })
+    .then((response) => {
+      if (!response.ok) {
+        console.log("Raw Response:", response);
+        return response.json().then(err => {
+          console.log("Error details:", err);  // Add logging to inspect error structure
+          throw new Error(err.message || 'Invalid credentials');
+        });
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.success) {
+        console.log("Parsed Data:", data);
+        
       
-      login(data.user, data.token); // ✅ Pass both user and token
-
-      navigate('/dashboard');
-    } else {
-      setError(data.message || 'Login failed'); // Show backend error message
-    }
-  })
-  .catch((err) => {
-    console.error('Login failed:', err);
-    setError(err.message || 'Something went wrong. Please try again later.');
-  });
+        login(data.user, data.token); // ✅ Pass both user and token
+        navigate('/dashboard');
+      } else {
+        setError(data.message || 'Login failed'); // Show backend error message
+      }
+    })
+    .catch((err) => {
+      console.error('Login failed:', err);
+      setError(err.message || 'Something went wrong. Please try again later.');
+    });
+  
+  
   
   };
 
@@ -86,7 +90,7 @@ const Login = () => {
           animation: 'fadeIn 1s ease-out', // Add fade-in animation
         }}>
           <Box textAlign="center" mb={2}>
-            <img src={CompanyLogo} alt="Company Logo" style={{ width: '250px', marginBottom: '10px', height: "100px" }} />
+            <img src={CompanyLogo} alt="Company Logo" style={{ width: '150px', marginBottom: '10px'}} />
             <Typography variant="h5" color="primary" fontWeight="bold" sx={{ fontFamily: 'Roboto, sans-serif' }}>
               Energy Management System
             </Typography>

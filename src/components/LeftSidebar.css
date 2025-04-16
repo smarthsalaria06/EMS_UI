@@ -1,51 +1,92 @@
 .left-menu {
-    width: 175px; /* Increased sidebar width */
-    background: #1c1e24;
-    color: #fff;
-    padding: 20px;
-    border-right: 1px solid #333;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    height: auto;
-    position: sticky;
-    top: 0;
-  }
-  
-  .left-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .left-menu li {
-    padding: 12px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 6px;
-    transition: background 0.3s;
-  }
-  
-  .left-menu li:hover {
-    background: #3a3d47;
-  }
-  
-  .left-menu .menu-header {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-  }
-  
-  .left-menu .active {
-    background-color: #4CAF50;
-    color: #fff;
-  }
-  h4{
-    font-size: 18px;
-    margin-top: 0px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 1px;
-    padding: 0px;
-  }
+  width: 60px; /* Default collapsed width */
+  background: #1c1e24;
+  color: #fff;
+  padding: 20px 10px; /* Adjusted padding for compactness */
+  border-right: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  transition: width 0.3s ease;
+}
+
+.left-menu:hover {
+  width: 180px; /* Expanded width when hovered */
+}
+
+.menu-header {
+  font-size: 22px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #90caf9;
+  display: none; /* Hide header by default when collapsed */
+}
+
+.left-menu:hover .menu-header {
+  display: block; /* Show header when the sidebar is expanded */
+}
+
+.left-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.left-menu li {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Align icons and text to center */
+  gap: 12px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 15px;
+  border-radius: 6px;
+  transition: background 0.3s ease, color 0.3s ease;
+  white-space: nowrap; /* Prevent text from overflowing */
+}
+
+.left-menu li:hover {
+  background-color: #2e313d;
+}
+
+.left-menu li span {
+  flex: 1;
+  display: none; /* Hide text when collapsed */
+}
+
+.left-menu .active {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.left-menu .active svg {
+  color: white;
+}
+
+.left-menu ul li svg {
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+
+.left-menu ul li.active svg {
+  color: white;
+}
+
+/* Show text when hovered */
+.left-menu:hover li span {
+  display: inline-block;
+}
+
+/* Optional: Add smoother transition when the menu expands and contracts */
+.left-menu li span {
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.left-menu:hover li span {
+  opacity: 1;
+}

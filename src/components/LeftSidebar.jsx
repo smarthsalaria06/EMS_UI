@@ -1,36 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Home,
-  Settings,
-  DataUsage,
   Alarm,
-  TrendingUp,
-  Report
+  Report,
+  People,
+  Dashboard as DashboardIcon,
+  Warning as WarningIcon,
+  BarChart as AnalyticsIcon,
+  FlashOn as PcsIcon,
+  BatteryChargingFull as BessIcon,
+  SettingsInputComponent as ModbusIcon,
+  DeviceHub as NetworkIcon,
+  Assessment as ReportsIcon,
 } from '@mui/icons-material';
-import '../pages/Dashboard.css';
 import './LeftSidebar.css';
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
 
+  const menuItems = [
+    { label: 'Home', icon: <DashboardIcon />, path: 'home' },
+    { label: 'SLD', icon: <Home />, path: 'sld' },
+    { label: 'PCS', icon: <PcsIcon />, path: 'pcs' },
+    { label: 'BESS', icon: <BessIcon />, path: 'bess' },
+    { label: 'Network', icon: <NetworkIcon />, path: 'network' },
+    { label: 'Analytics', icon: <AnalyticsIcon />, path: 'analytics' },
+    { label: 'Reports', icon: <ReportsIcon />, path: 'reports' },
+    { label: 'Alarms/Events', icon: <Alarm />, path: 'alarms' },
+    { label: 'Modbus Config', icon: <ModbusIcon />, path: 'modbus' },
+    { label: 'User Management', icon: <People />, path: 'usermanagement' },
+  ];
+
   const handleMenuItemClick = (page) => {
-    navigate(`/dashboard/${page.toLowerCase()}`);
+    navigate(`/dashboard/${page}`);
   };
 
   return (
     <div className="left-menu">
-      <h4>Menu</h4>
+      <h4 className="menu-header">Menu</h4>
       <ul>
-        <li onClick={() => handleMenuItemClick('Home')}><Home /> SLD</li>
-        <li onClick={() => handleMenuItemClick('PCS')}><Settings /> PCS</li>
-        <li onClick={() => handleMenuItemClick('BESS')}><DataUsage /> BESS</li>
-        <li onClick={() => handleMenuItemClick('Network')}><TrendingUp /> Network</li>
-        <li onClick={() => handleMenuItemClick('Analytics')}><TrendingUp /> Analytics</li>
-        <li onClick={() => handleMenuItemClick('Reports')}><Report /> Reports</li>
-        <li onClick={() => handleMenuItemClick('Alarms')}><Alarm /> Alarms/Events</li>
-        <li onClick={() => handleMenuItemClick('Modbus')}><Settings /> Modbus Configuration</li>
-        <li onClick={() => handleMenuItemClick('UserManagement')}><Settings /> User Management</li>
+        {menuItems.map((item, idx) => (
+          <li
+            key={idx}
+            className={window.location.pathname.includes(item.path) ? 'active' : ''}
+            onClick={() => handleMenuItemClick(item.path)}
+          >
+            {item.icon}
+            <span>{item.label}</span>
+          </li>
+        ))}
       </ul>
     </div>
   );

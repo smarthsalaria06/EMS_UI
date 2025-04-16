@@ -4,15 +4,19 @@
       "id": "1",
       "username": "admin",
       "password": "admin",
-      "name": "Admin ",
-      "email": "admin@example.com"
+      "name": "Admin",
+      "email": "admin@example.com",
+      "role": "admin",
+      "access": ["dashboard", "user-management"]
     },
     {
       "id": "2",
       "username": "smarth",
       "password": "admin",
-      "name": "Smarth ",
-      "email": "smarth.salaria@anvipower.com"
+      "name": "Smarth",
+      "email": "smarth.salaria@anvipower.com",
+      "role": "user",
+      "access": ["dashboard"]
     }
   ]
 }
