@@ -9,11 +9,12 @@ import LiveMetrics from '../components/LiveMetrics';
 import LeftSidebar from '../components/LeftSidebar';
 import ThemeToggle from '../components/ThemeToggle';
 import ErrorBoundary from '../components/ErrorBoundary';
+import SessionExpirePopup from '../components/SessionExpirePopup'; // Import the SessionExpirePopup
 import './Dashboard.css';
 import { Outlet } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, sessionExpired, timeRemaining, renewSession } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [theme, setTheme] = useState('light');
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
@@ -58,6 +59,10 @@ const Dashboard = () => {
     setIsSidebarExpanded((prev) => !prev);
   };
 
+  // Display session time remaining in minutes and seconds
+  const minutes = Math.floor(timeRemaining / 60000);
+  const seconds = Math.floor((timeRemaining % 60000) / 1000);
+
   return (
     <div className={`dashboard-container ${theme}`}>
       <div className="top-bar">
@@ -72,7 +77,15 @@ const Dashboard = () => {
         <div className="software-name">
           <h2>Energy Management System</h2>
         </div>
- 
+        
+        <div className="session-timer">
+          {sessionExpired ? (
+            <span>Session Expired</span>
+          ) : (
+            <span>Session Remaining: {minutes}:{seconds < 10 ? '0' : ''}{seconds}</span>
+          )}
+        </div>
+
         <div className="user-profile">
           <IconButton onClick={handleAvatarClick} className="user-avatar-button">
             {user?.photoURL ? (
@@ -106,6 +119,9 @@ const Dashboard = () => {
           </ErrorBoundary>
         )}
       </div>
+
+      {/* Show the session expiry popup when session is expired */}
+      {sessionExpired && <SessionExpirePopup renewSession={renewSession} logout={handleLogout} />}
     </div>
   );
 };

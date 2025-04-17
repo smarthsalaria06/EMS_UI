@@ -23,23 +23,24 @@ const routesPath = path.join(__dirname, 'routes.json');
 let dbData = {};
 let routes = {};
 
-// Load mock data from db.json
-try {
-  const rawData = fs.readFileSync(dbPath, 'utf-8');
-  dbData = JSON.parse(rawData);
-  console.log('✅ Mock data loaded from db.json');
-} catch (err) {
-  console.error('❌ Failed to load db.json', err);
-}
+// Function to load data asynchronously
+const loadData = async () => {
+  try {
+    const rawData = await fs.promises.readFile(dbPath, 'utf-8');
+    dbData = JSON.parse(rawData);
+    console.log('✅ Mock data loaded from db.json');
+  } catch (err) {
+    console.error('❌ Failed to load db.json', err);
+  }
 
-// Load routes from routes.json
-try {
-  const rawRoutes = fs.readFileSync(routesPath, 'utf-8');
-  routes = JSON.parse(rawRoutes);
-  console.log('✅ Routes loaded from routes.json');
-} catch (err) {
-  console.error('❌ Failed to load routes.json', err);
-}
+  try {
+    const rawRoutes = await fs.promises.readFile(routesPath, 'utf-8');
+    routes = JSON.parse(rawRoutes);
+    console.log('✅ Routes loaded from routes.json');
+  } catch (err) {
+    console.error('❌ Failed to load routes.json', err);
+  }
+};
 
 // ----------------- Login Route -----------------
 app.post(routes.login, (req, res) => {
@@ -49,30 +50,37 @@ app.post(routes.login, (req, res) => {
   const user = dbData.users.find(
     (u) => u.username === username && u.password === password
   );
-  
+
   if (user) {
     console.log('User found:', user);
     const { password, ...safeUser } = user;
 
-    // Default token expiration time from environment variable or 1 hour if not provided
-    const expiresIn = process.env.JWT_EXPIRY || '1h';
+    // Default session expiration time (30 minutes for testing)
+    const expiresIn = 30 * 60 * 1000; // 30 minutes in milliseconds
+    const sessionExpiryTime = Date.now() + expiresIn;
 
-    // Generate JWT token (expires in configurable time)
-    const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
-      expiresIn: expiresIn,
-    });
+    // Generate JWT token with session expiry info
+    const token = jwt.sign(
+      { id: user.id, username: user.username, sessionExpiryTime },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '1h', // token expiration
+      }
+    );
 
-    // Respond with the user data and JWT token
+    // Store sessionExpiryTime in response to frontend
     res.json({
       success: true,
       user: safeUser,
       token: token,
+      sessionExpiryTime, // Send expiry time to frontend
     });
   } else {
     console.log('Invalid credentials');
     res.status(401).json({ success: false, message: 'Invalid credentials' });
   }
 });
+
 
 // ------------- Middleware for Token Validation -------------
 const verifyToken = (req, res, next) => {
@@ -109,7 +117,25 @@ app.get(routes.fallback, (req, res) => {
   res.send('Mock EMS API running ✅');
 });
 
-// Start the server
-app.listen(PORT, () => {
+// Start the server and load data
+app.listen(PORT, async () => {
+  await loadData();  // Load the mock data before the server starts
   console.log(`🚀 Mock server running at http://localhost:${PORT}`);
+});
+
+app.post('/renew-token', verifyToken, (req, res) => {
+  const { id, username } = req.user;
+
+  // Extend session expiration by 30 minutes
+  const newSessionExpiryTime = Date.now() + 1 * 60 * 1000;
+
+  // Generate a new JWT token with updated session expiration
+  const newToken = jwt.sign(
+    { id, username, sessionExpiryTime: newSessionExpiryTime },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+
+  // Send new token and updated session expiry time
+  res.json({ success: true, token: newToken, sessionExpiryTime: newSessionExpiryTime });
 });

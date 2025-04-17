@@ -1,0 +1,86 @@
+/* Overlay to freeze the page */
+.session-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none; /* Prevent interaction with page */
+}
+
+/* Popup box */
+.session-popup {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  pointer-events: auto; /* Allow interaction with popup */
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Header for the popup */
+.popup-header {
+  color: #f44336;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+/* General text style */
+.popup-text {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+/* Button styles */
+.popup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 120px;
+  font-weight: bold;
+}
+
+.renew {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.renew:hover {
+  background-color: #45a049;
+}
+
+.logout {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.logout:hover {
+  background-color: #e53935;
+}
+
+.ok {
+  background-color: #2196f3;
+  color: #fff;
+}
+
+.ok:hover {
+  background-color: #1976d2;
+}

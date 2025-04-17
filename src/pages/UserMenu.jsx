@@ -12,12 +12,12 @@ import InfoIcon from '@mui/icons-material/Info';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import AboutPage from './AboutPage';
-import { useAuth } from '../context/AuthContext'; // Access theme toggle
+import { useAuth } from '../context/AuthContext'; // ✅ directly use AuthContext
 import './UserMenu.css';
 
-const UserMenu = ({ anchorEl, open, onClose, user, onLogout }) => {
+const UserMenu = ({ anchorEl, open, onClose, user }) => {
   const [aboutOpen, setAboutOpen] = useState(false);
-  const { theme, toggleTheme } = useAuth(); // Use from AuthContext
+  const { theme, toggleTheme, logout } = useAuth(); // ✅ Get logout directly from useAuth
 
   const handleAboutOpen = () => {
     setAboutOpen(true);
@@ -39,7 +39,6 @@ const UserMenu = ({ anchorEl, open, onClose, user, onLogout }) => {
           className: 'menu-animation'
         }}
       >
-        {/* Display email */}
         <MenuItem disabled>
           <ListItemIcon>
             <EmailIcon fontSize="small" />
@@ -49,7 +48,6 @@ const UserMenu = ({ anchorEl, open, onClose, user, onLogout }) => {
 
         <Divider />
 
-        {/* Theme Toggle */}
         <MenuItem onClick={toggleTheme}>
           <ListItemIcon>
             {theme === 'light' ? <Brightness4Icon fontSize="small" /> : <Brightness7Icon fontSize="small" />}
@@ -61,7 +59,6 @@ const UserMenu = ({ anchorEl, open, onClose, user, onLogout }) => {
 
         <Divider />
 
-        {/* About Section */}
         <MenuItem onClick={handleAboutOpen}>
           <ListItemIcon>
             <InfoIcon fontSize="small" />
@@ -71,8 +68,7 @@ const UserMenu = ({ anchorEl, open, onClose, user, onLogout }) => {
 
         <Divider />
 
-        {/* Logout Section */}
-        <MenuItem onClick={onLogout}>
+        <MenuItem onClick={logout}>
           <ListItemIcon>
             <LogoutIcon fontSize="small" />
           </ListItemIcon>
@@ -80,7 +76,6 @@ const UserMenu = ({ anchorEl, open, onClose, user, onLogout }) => {
         </MenuItem>
       </Menu>
 
-      {/* About Page Dialog */}
       <AboutPage open={aboutOpen} onClose={handleAboutClose} />
     </>
   );
