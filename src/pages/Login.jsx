@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, Container, Paper, IconButton, CircularProgress } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Container,
+  Paper,
+  IconButton,
+  CircularProgress,
+  useMediaQuery
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { AccountCircle, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
-import CompanyLogo from '../assets/company-logo.png'; // Add your company logo image here
-import CompanyBackground from '../assets/company-background.png'; // Add your company background image here
+import CompanyLogo from '../assets/company-logo.png';
+import CompanyBackground from '../assets/company-background.png';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -13,7 +24,10 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // To handle loading state
+  const [loading, setLoading] = useState(false);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleLogin = () => {
     if (!username || !password) {
@@ -22,76 +36,92 @@ const Login = () => {
     }
 
     setError('');
-    setLoading(true); // Start loading when login is triggered
+    setLoading(true);
 
     setTimeout(() => {
-    fetch('http://localhost:5000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    })
-      .then((response) => {
-        setLoading(true); // Stop loading after receiving response
-        if (!response.ok) {
-          return response.json().then((err) => {
-            throw new Error(err.message || 'Invalid credentials');
-          });
-        }
-        return response.json();
+      fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
       })
-      .then((data) => {
-        if (data.success) {
-          login(data.user, data.token); // ✅ Pass both user and token
-          navigate('/dashboard/home');
-        } else {
-          setError(data.message || 'Login failed'); // Show backend error message
-        }
-      })
-      .catch((err) => {
-        setLoading(false); // Stop loading in case of error
-        setError(err.message || 'Something went wrong. Please try again later.');
-      });
-  }, 1500);
-};
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then((err) => {
+              throw new Error(err.message || 'Invalid credentials');
+            });
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setLoading(false);
+          if (data.success) {
+            login(data.user, data.token);
+            navigate('/dashboard/home');
+          } else {
+            setError(data.message || 'Login failed');
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          setError(err.message || 'Something went wrong. Please try again later.');
+        });
+    }, 1500);
+  };
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   return (
-    <div className="login-background" style={{
-      display: 'flex',
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #7f56d9, #4c79f3)', // Gradient background
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundImage: `url(${CompanyBackground})`, // Company background image
-      backgroundSize: 'cover',
-      backgroundPosition: 'left center',
-    }}>
-      <Container component="main" maxWidth="xs" sx={{
+    <div
+      className="login-background"
+      style={{
         display: 'flex',
-        justifyContent: 'flex-end',
-        paddingRight: '5%',
-      }}>
-        <Paper elevation={15} sx={{
-          padding: 4,
-          borderRadius: '20px',
-          backgroundColor: 'rgba(255, 255, 255, 0.7)', // Transparent background for login box
-          backdropFilter: 'blur(8px)',
-          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
-          marginTop: 0,
-          position: 'relative',
-          zIndex: 2,
-          width: '350px', // Adjust width for the login box
-          animation: 'fadeIn 1s ease-out', // Add fade-in animation
-        }}>
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #7f56d9, #4c79f3)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundImage: `url(${CompanyBackground})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        padding: isMobile ? '20px' : '0',
+      }}
+    >
+      <Container
+        component="main"
+        maxWidth="xs"
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        className="login-container"
+      >
+        <Paper
+          elevation={15}
+          sx={{
+            padding: isMobile ? 3 : 4,
+            borderRadius: '20px',
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(8px)',
+            boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
+            width: '100%',
+            maxWidth: '400px',
+          }}
+          className="login-paper"
+        >
           <Box textAlign="center" mb={2}>
-            <img src={CompanyLogo} alt="Company Logo" style={{ width: '150px', marginBottom: '10px'}} />
-            <Typography variant="h5" color="primary" fontWeight="bold" sx={{ fontFamily: 'Roboto, sans-serif' }}>
+            <img
+              src={CompanyLogo}
+              alt="Company Logo"
+              className="login-logo" 
+              style={{ width: isMobile ? '120px' : '150px', marginBottom: '10px' }}
+            />
+            <Typography
+              variant="h6"
+              color="primary"
+              fontWeight="bold"
+              sx={{ fontFamily: 'Roboto, sans-serif' }}
+              className="login-title"
+            >
               Energy Management System
             </Typography>
           </Box>
@@ -107,23 +137,17 @@ const Login = () => {
             sx={{
               '& .MuiInputBase-root': {
                 borderRadius: 4,
-                backgroundColor: 'rgba(255, 255, 255, 0.8)', // Light background for input fields
+                backgroundColor: 'rgba(255, 255, 255, 0.8)',
               },
               '& .MuiInputLabel-root': {
                 color: 'rgba(0, 0, 0, 0.6)',
               },
               '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#4c79f3', // Blue border on hover
-              },
-              '& .MuiInputLabel-shrink': {
-                transform: 'translate(14px, -6px) scale(0.75)', // Move label above field when typing
-                transition: 'transform 0.2s ease-out', // Smooth transition
+                borderColor: '#4c79f3',
               },
             }}
             InputProps={{
-              startAdornment: (
-                <AccountCircle sx={{ color: '#4c79f3' }} />
-              ),
+              startAdornment: <AccountCircle sx={{ color: '#4c79f3', mr: 1 }} />,
             }}
           />
 
@@ -147,15 +171,9 @@ const Login = () => {
               '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
                 borderColor: '#4c79f3',
               },
-              '& .MuiInputLabel-shrink': {
-                transform: 'translate(14px, -6px) scale(0.75)', // Move label above field when typing
-                transition: 'transform 0.2s ease-out', // Smooth transition
-              },
             }}
             InputProps={{
-              startAdornment: (
-                <Lock sx={{ color: '#4c79f3' }} />
-              ),
+              startAdornment: <Lock sx={{ color: '#4c79f3', mr: 1 }} />,
               endAdornment: (
                 <IconButton
                   onClick={handleClickShowPassword}
@@ -178,18 +196,23 @@ const Login = () => {
               padding: '10px 0',
               borderRadius: 25,
               backgroundColor: '#4c79f3',
+              fontSize: isMobile ? '0.9rem' : '1rem',
               '&:hover': {
-                backgroundColor: '#1E90FF', // Lighter blue on hover
+                backgroundColor: '#1E90FF',
               },
             }}
             onClick={handleLogin}
-            disabled={loading} // Disable the button when loading
+            disabled={loading}
           >
             {loading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
           </Button>
 
           {/* Error Message */}
-          {error && <Typography color="error" align="center" mt={2}>{error}</Typography>}
+          {error && (
+            <Typography color="error" align="center" mt={2} fontSize={isMobile ? '0.85rem' : '1rem'}>
+              {error}
+            </Typography>
+          )}
         </Paper>
       </Container>
     </div>

@@ -17,6 +17,8 @@ import Network from './pages/Network';
 import PCS from './pages/PCS';
 import Reports from './pages/Reports';
 import UserManagement from './pages/UserManagement';
+import { isMobile } from 'react-device-detect';
+import DashboardWrapper from './context/DashboardWrapper';
 
 const AppContent = () => {
   const { theme } = useAuth();
@@ -43,7 +45,7 @@ const AppContent = () => {
           path="/dashboard"
           element={
           
-              <Dashboard />
+            <DashboardWrapper />
          
           }
         >

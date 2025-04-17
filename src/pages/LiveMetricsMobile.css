@@ -1,0 +1,19 @@
+.live-metrics-mobile {
+    padding: 16px;
+  }
+  
+  .metric-data {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .metric-item {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .card {
+    margin-bottom: 16px;
+  }
+  
