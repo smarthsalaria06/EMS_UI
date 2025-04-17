@@ -1,8 +1,8 @@
 .left-menu {
-  width: 60px; /* Default collapsed width */
+  width: 70px; /* Adjusted to provide more space for icons */
   background: #1c1e24;
   color: #fff;
-  padding: 20px 10px; /* Adjusted padding for compactness */
+  padding: 20px 10px;
   border-right: 1px solid #333;
   display: flex;
   flex-direction: column;
@@ -10,10 +10,15 @@
   position: sticky;
   top: 0;
   transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.left-menu.collapsed {
+  width: 70px; /* Increase collapsed width to avoid cutting off icons */
 }
 
 .left-menu:hover {
-  width: 180px; /* Expanded width when hovered */
+  width: 180px; /* Expanded width on hover */
 }
 
 .menu-header {
@@ -22,12 +27,11 @@
   text-transform: uppercase;
   margin-bottom: 30px;
   text-align: center;
-  color: #90caf9;
-  display: none; /* Hide header by default when collapsed */
+  color: #339bef;
 }
 
-.left-menu:hover .menu-header {
-  display: block; /* Show header when the sidebar is expanded */
+.left-menu.collapsed .menu-header {
+  display: none; /* Hide header when collapsed */
 }
 
 .left-menu ul {
@@ -39,54 +43,68 @@
 .left-menu li {
   display: flex;
   align-items: center;
-  justify-content: center; /* Align icons and text to center */
-  gap: 12px;
+  justify-content: flex-start; /* Align icons and text to the left */
+  gap: 15px;
   padding: 10px 12px;
   cursor: pointer;
   font-size: 15px;
   border-radius: 6px;
   transition: background 0.3s ease, color 0.3s ease;
-  white-space: nowrap; /* Prevent text from overflowing */
+  white-space: nowrap;
+  overflow: hidden; /* Ensure text stays within bounds */
 }
 
 .left-menu li:hover {
   background-color: #2e313d;
 }
 
-.left-menu li span {
-  flex: 1;
-  display: none; /* Hide text when collapsed */
-}
-
-.left-menu .active {
-  background-color: #4caf50;
+.left-menu li.active {
+  background-color: #4caf50; /* Green highlight for active state */
   color: #fff;
 }
 
-.left-menu .active svg {
-  color: white;
+.left-menu li.active svg {
+  color: white; /* Active icon color */
 }
 
+.left-menu li span {
+  flex: 1;
+  display: none; /* Hide text by default */
+  color: #fff; /* Default text color */
+}
+
+.left-menu.collapsed li span {
+  display: none; /* Ensure text is hidden in collapsed state */
+}
+
+.left-menu li span {
+  display: inline-block; /* Show labels when expanded */
+  margin-left: 10px; /* Add some margin to space the text from the icon */
+  color: #000000ab; /* Text color when expanded */
+}
+
+/* Icons styling */
 .left-menu ul li svg {
   color: #ccc;
+  font-size: 24px; /* Increased icon size */
   transition: color 0.3s ease;
 }
 
 .left-menu ul li.active svg {
-  color: white;
+  color: #fff; /* Active icon color */
 }
 
-/* Show text when hovered */
-.left-menu:hover li span {
-  display: inline-block;
+.left-menu.collapsed li svg {
+  font-size: 24px; /* Ensure icon size is large enough in collapsed state */
+  color: #ccc; /* Default icon color */
 }
 
-/* Optional: Add smoother transition when the menu expands and contracts */
+.left-menu li:hover svg {
+  color: #90caf9; /* Highlight icon on hover */
+}
+
 .left-menu li span {
-  transition: opacity 0.3s ease;
-  opacity: 0;
-}
-
-.left-menu:hover li span {
-  opacity: 1;
+  text-overflow: ellipsis; /* Ensure long text is truncated with '...' */
+  white-space: nowrap;
+  overflow: hidden;
 }

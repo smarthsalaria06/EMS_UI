@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import {
   Box, Typography, Checkbox, Button, MenuItem, Select, TextField, Table, TableBody,
-  TableCell, TableContainer, TableHead, TableRow, Paper, Pagination
+  TableCell, TableContainer, TableHead, TableRow, Paper, Pagination, Dialog, DialogTitle, 
+  DialogContent, DialogActions, Snackbar, Alert
 } from '@mui/material';
 import { saveAs } from 'file-saver';
 
@@ -13,6 +14,12 @@ const Alarms = () => {
   const [ackFilter, setAckFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const alarmsPerPage = 5;
+
+  // Dialog and Snackbar States
+  const [selectedAckId, setSelectedAckId] = useState(null);
+  const [selectedDelId, setSelectedDelId] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     fetch('/dummy.json')
@@ -41,30 +48,49 @@ const Alarms = () => {
     setCurrentPage(1);
   }, [search, priorityFilter, ackFilter, alarms]);
 
+  // Handle Acknowledge
   const handleAcknowledge = (id) => {
-    const confirmAck = window.confirm("Acknowledge this alarm?");
-    if (!confirmAck) return;
+    setSelectedAckId(id); // Triggers the dialog to open
+  };
 
+  const confirmAcknowledge = () => {
     const updated = alarms.map(alarm =>
-      alarm.id === id
+      alarm.id === selectedAckId
         ? { ...alarm, acknowledged: true, timestamp: new Date().toISOString() }
         : alarm
     );
     setAlarms(updated);
+    setSelectedAckId(null);
+    setSnackbarMessage('Alarm acknowledged');
+    setSnackbarOpen(true);
   };
 
+  const cancelAcknowledge = () => {
+    setSelectedAckId(null);
+  };
+
+  // Handle Delete
   const handleDelete = (id) => {
-    const confirmDelete = window.confirm("Delete this alarm?");
-    if (!confirmDelete) return;
-
-    const updated = alarms.filter(alarm => alarm.id !== id);
-    setAlarms(updated);
+    setSelectedDelId(id); // Triggers the dialog to open
   };
 
+  const confirmDelete = () => {
+    const updated = alarms.filter(alarm => alarm.id !== selectedDelId);
+    setAlarms(updated);
+    setSelectedDelId(null);
+    setSnackbarMessage('Alarm deleted');
+    setSnackbarOpen(true);
+  };
+
+  const cancelDelete = () => {
+    setSelectedDelId(null);
+  };
+
+  // Export to CSV
   const handleExportCSV = () => {
     const headers = 'ID,Message,Priority,Acknowledged,Timestamp\n';
     const rows = filteredAlarms.map(a =>
-      `${a.id},"${a.message}",${a.priority},${a.acknowledged},${a.timestamp}`
+      `${a.id},"${a.message}",${a.priority},${a.acknowledged},${a.timestamp}` 
     ).join('\n');
     const csv = headers + rows;
 
@@ -72,6 +98,7 @@ const Alarms = () => {
     saveAs(blob, 'alarms.csv');
   };
 
+  // Pagination Logic
   const indexOfLastAlarm = currentPage * alarmsPerPage;
   const indexOfFirstAlarm = indexOfLastAlarm - alarmsPerPage;
   const currentAlarms = filteredAlarms.slice(indexOfFirstAlarm, indexOfLastAlarm);
@@ -157,6 +184,45 @@ const Alarms = () => {
           }
         `}
       </style>
+
+      {/* Dialogs */}
+      <Dialog open={!!selectedAckId} onClose={cancelAcknowledge}>
+        <DialogTitle>Confirm Acknowledge</DialogTitle>
+        <DialogContent>
+          Are you sure you want to acknowledge this alarm?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cancelAcknowledge}>Cancel</Button>
+          <Button onClick={confirmAcknowledge} variant="contained" color="primary">
+            Yes, Acknowledge
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={!!selectedDelId} onClose={cancelDelete}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete this alarm?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cancelDelete}>Cancel</Button>
+          <Button onClick={confirmDelete} variant="contained" color="error">
+            Yes, Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Snackbar */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setSnackbarOpen(false)} severity="success" variant="filled">
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

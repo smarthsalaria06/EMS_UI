@@ -3,21 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { IconButton, Avatar } from '@mui/material';
 import CompanyLogo from '../assets/company-logo.png';
-import UserMenu from './UserMenu'; // User will share later
+import UserMenu from './UserMenu';
 import LiveMetrics from '../components/LiveMetrics';
 import LeftSidebar from '../components/LeftSidebar'; // ✅ New Sidebar component
 import './Dashboard.css';
 import { Outlet } from 'react-router-dom';
 import ThemeToggle from '../components/ThemeToggle'; // Import ThemeToggle
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const Dashboard = () => {
-  const { user, logout } = useAuth(); // Assuming you have a logout function in AuthContext
+  const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [theme, setTheme] = useState('light'); // Manage theme state here
-
+  const [theme, setTheme] = useState('light');
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false); // Track sidebar expanded state
   const navigate = useNavigate();
 
-  // Redirect if no valid token found
   useEffect(() => {
     const token = sessionStorage.getItem('authToken');
     if (!token) {
@@ -29,40 +29,33 @@ const Dashboard = () => {
   const handleMenuClose = () => setAnchorEl(null);
 
   const handleLogout = () => {
-    // Clear sessionStorage data
     sessionStorage.removeItem('authToken');
     sessionStorage.removeItem('user');
-    
-    // Call logout function from AuthContext to reset the global state
     logout();
-
-    // Redirect to login page
     navigate('/login');
   };
 
   const getInitials = (name) => {
     if (!name) return 'U';
-    return name
-      .trim()
-      .split(' ')
-      .map((n) => n[0].toUpperCase())
-      .join('');
+    return name.trim().split(' ').map((n) => n[0].toUpperCase()).join('');
   };
 
-  // Update theme state when theme changes
   const updateTheme = (newTheme) => {
     setTheme(newTheme);
   };
 
   useEffect(() => {
-    // Retrieve theme from localStorage or default to light
     const storedTheme = localStorage.getItem('theme') || 'light';
     setTheme(storedTheme);
   }, []);
 
+  // Toggle sidebar expanded state on hover or click
+  const handleSidebarToggle = () => {
+    setIsSidebarExpanded((prev) => !prev);
+  };
+
   return (
     <div className={`dashboard-container ${theme}`}>
-      {/* Top Bar */}
       <div className="top-bar">
         <div className="logo-container">
           <img src={CompanyLogo} alt="Company Logo" className="company-logo" />
@@ -86,24 +79,18 @@ const Dashboard = () => {
             onLogout={handleLogout}
           />
         </div>
-
-        {/* Theme toggle */}
-        
       </div>
 
-      {/* Layout */}
       <div className="main-layout">
-        <LeftSidebar /> {/* ✅ Sidebar Component */}
-
-        {/* Main Content */}
+        <LeftSidebar isExpanded={isSidebarExpanded} onSidebarToggle={handleSidebarToggle} />
         <div className="center-content">
           <Outlet />
         </div>
-
-        {/* Right Sidebar */}
+        <ErrorBoundary>
         <div className="right-sidebar">
-          <LiveMetrics theme={theme} /> {/* Pass the theme prop to LiveMetrics */}
+          <LiveMetrics theme={theme} />
         </div>
+        </ErrorBoundary>
       </div>
     </div>
   );

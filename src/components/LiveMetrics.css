@@ -1,0 +1,272 @@
+/* === General Container === */
+.live-metrics-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  border-radius: 8px;
+  font-size: 0.8rem;
+}
+
+.metrics-section {
+  padding-bottom: 10px;
+}
+
+/* === Metrics Row for flexible layout === */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 equal-width columns */
+  grid-template-rows: repeat(2, 1fr); /* 2 equal-height rows */
+  gap: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+}
+
+
+
+
+
+.title {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #339bef;
+  font-weight: bold;
+ 
+}
+
+
+.metrics-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.metrics-row::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color);
+  border-radius: 6px;
+}
+
+.metrics-row::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color);
+}
+
+/* === Draggable Wrapper === */
+.draggable-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Allow cards to grow to fill their grid cell */
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.draggable-wrapper.dragging {
+  transform: scale(1.08);
+  z-index: 20;
+  opacity: 0.7;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* === Drag Overlay === */
+.drag-overlay {
+  border: 2px dashed var(--primary-color);
+  background-color: var(--card-bg-color);
+  border-radius: 12px;
+  opacity: 0.8;
+}
+
+/* === Metric Card Style === */
+.metric-card {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 80px;
+  min-width: 80px;
+  max-width: fit-content;
+  height: 140px;
+  background-color: var(--card-bg-color);
+  color: var(--text-color);
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  user-select: none;
+}
+
+
+
+.metric-card:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* === Alternate Style for Cards (non-draggable) === */
+.metric-card-1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 90px;
+  padding: 12px;
+  background-color: var(--card-bg-color);
+  color: var(--text-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* === Metric Card Text === */
+.metric-card h6,
+.metric-card .MuiTypography-h6 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--heading-color);
+}
+
+.metric-card .MuiTypography-body2 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--secondary-text-color);
+}
+
+/* === Locked Card (Operation Mode) === */
+.operation-mode.locked {
+  cursor: pointer;
+  background-color: var(--card-bg-color);
+  border: 2px medium var(--primary-color);
+}
+
+.operation-mode-text {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+.operation-mode-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--heading-color);
+  margin-top: 5px;
+}
+
+/* === Modal Styles === */
+.operation-mode-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.operation-mode-modal-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.operation-mode-button {
+  margin-top: 20px;
+  padding: 8px 16px;
+  border: none;
+  color: rgb(0, 0, 0);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.operation-mode-button:hover {
+  background-color: var(--hover-bg-color);
+}
+
+/* === Alarms Section === */
+.alarm-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+.alarm-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--alarm-bg);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+/* Styles for alarm dot */
+.alarm-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.alarm-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.alarm-item span.alarm-dot.low {
+  background-color: green;
+}
+
+.alarm-item span.alarm-dot.medium {
+  background-color: orange;
+}
+
+.alarm-item span.alarm-dot.high {
+  background-color: red;
+}
+
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.operation-mode-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  padding: 12px;
+  background-color: var(--card-bg-color);
+  color: var(--text-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 12px;
+  user-select: none;
+  transition: transform 0.2s ease-in-out;
+}
+
+.operation-mode-card.locked:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.operation-mode-card.locked {
+  cursor: pointer;
+  background-color: var(--card-bg-color);
+  border: 2px solid var(--primary-color);
+}
+
+.operation-mode-card.locked:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+

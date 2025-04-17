@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
   Table, TableHead, TableRow, TableCell, TableBody, Button,
-  Modal, TextField, Box, IconButton, MenuItem, Checkbox, FormControlLabel
+  Modal, TextField, Box, IconButton, MenuItem, Checkbox, FormControlLabel,
+  Snackbar, Alert, InputAdornment
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
 
 const roles = ['admin', 'operator', 'viewer'];
 const pages = ['dashboard', 'live-metrics', 'user-management', 'settings'];
@@ -18,11 +20,8 @@ const modalStyle = {
   boxShadow: 24, p: 4, borderRadius: '8px'
 };
 
-// ✅ Use sessionStorage and correct token key
 const getAuthConfig = () => {
   const token = sessionStorage.getItem('authToken');
-  console.log('Retrieved token from sessionStorage:', token);
-  if (!token) console.warn('⚠️ No token found in sessionStorage');
   return {
     headers: {
       Authorization: token ? `Bearer ${token}` : ''
@@ -37,7 +36,12 @@ const UserManagement = () => {
   const [formData, setFormData] = useState({
     username: '', password: '', name: '', email: '', role: 'admin', access: []
   });
-  const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
+
+  const showSnackbar = (message, severity = 'info') => {
+    setSnackbar({ open: true, message, severity });
+  };
 
   const fetchUsers = async () => {
     try {
@@ -49,7 +53,7 @@ const UserManagement = () => {
       }
     } catch (err) {
       console.error('Error fetching users:', err.response?.data || err.message);
-      setError('Failed to fetch users. Please login again or try later.');
+      showSnackbar('Failed to fetch users. Please login again or try later.', 'error');
     }
   };
 
@@ -69,7 +73,6 @@ const UserManagement = () => {
     setModalOpen(false);
     setEditingUser(null);
     setFormData({ username: '', password: '', name: '', email: '', role: 'admin', access: [] });
-    setError('');
   };
 
   const handleChange = (e) => {
@@ -90,13 +93,12 @@ const UserManagement = () => {
     const { username, password, name, email } = formData;
 
     if (!username || (!editingUser && !password) || !name || !email) {
-      setError('All fields (except password during edit) are required.');
+      showSnackbar('All fields (except password during edit) are required.', 'warning');
       return;
     }
 
     try {
       if (editingUser) {
-        // Don't send empty password if unchanged
         const payload = { ...formData };
         if (!formData.password) delete payload.password;
 
@@ -105,14 +107,16 @@ const UserManagement = () => {
           payload,
           getAuthConfig()
         );
+        showSnackbar('User updated successfully.', 'success');
       } else {
         await axios.post('http://localhost:5000/users', formData, getAuthConfig());
+        showSnackbar('User created successfully.', 'success');
       }
       handleClose();
       fetchUsers();
     } catch (err) {
       console.error('Save failed:', err.response?.data || err.message);
-      setError('Failed to save user. Please try again.');
+      showSnackbar('Failed to save user. Please try again.', 'error');
     }
   };
 
@@ -120,21 +124,63 @@ const UserManagement = () => {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
       await axios.delete(`http://localhost:5000/users/${id}`, getAuthConfig());
+      showSnackbar('User deleted successfully.', 'success');
       fetchUsers();
     } catch (err) {
       console.error('Delete failed:', err.response?.data || err.message);
-      setError('Failed to delete user.');
+      showSnackbar('Failed to delete user.', 'error');
     }
+  };
+
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleExportCSV = () => {
+    const csvHeader = ['Name', 'Username', 'Email', 'Role', 'Access'];
+    const csvRows = users.map(user => [
+      user.name, user.username, user.email, user.role, (user.access || []).join('; ')
+    ]);
+
+    const csvContent = [
+      csvHeader.join(','),
+      ...csvRows.map(row => row.map(val => `"${val}"`).join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'users.csv';
+    a.click();
   };
 
   return (
     <div style={{ padding: '2rem' }}>
       <h2>User Management</h2>
-      <Button variant="contained" onClick={() => handleOpen()}>Add New User</Button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+        <Button variant="contained" onClick={() => handleOpen()}>Add New User</Button>
+        <div>
+          <TextField
+            size="small"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              )
+            }}
+            sx={{ marginRight: 2 }}
+          />
+          <Button variant="outlined" onClick={handleExportCSV}>Export CSV</Button>
+        </div>
+      </div>
 
-      {error && <div style={{ color: 'red', marginTop: '1rem' }}>{error}</div>}
-
-      <Table sx={{ mt: 2 }}>
+      <Table>
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
@@ -146,12 +192,12 @@ const UserManagement = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.length === 0 ? (
+          {filteredUsers.length === 0 ? (
             <TableRow>
               <TableCell colSpan={6} align="center">No users found</TableCell>
             </TableRow>
           ) : (
-            users.map(user => (
+            filteredUsers.map(user => (
               <TableRow key={user.id}>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.username}</TableCell>
@@ -168,6 +214,7 @@ const UserManagement = () => {
         </TableBody>
       </Table>
 
+      {/* Modal */}
       <Modal open={modalOpen} onClose={handleClose}>
         <Box sx={modalStyle}>
           <h3>{editingUser ? 'Edit User' : 'Add User'}</h3>
@@ -217,6 +264,22 @@ const UserManagement = () => {
           </Button>
         </Box>
       </Modal>
+
+      {/* Snackbar Alerts */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

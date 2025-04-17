@@ -54,9 +54,12 @@ app.post(routes.login, (req, res) => {
     console.log('User found:', user);
     const { password, ...safeUser } = user;
 
-    // Generate JWT token (expires in 1 hour)
+    // Default token expiration time from environment variable or 1 hour if not provided
+    const expiresIn = process.env.JWT_EXPIRY || '1h';
+
+    // Generate JWT token (expires in configurable time)
     const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
+      expiresIn: expiresIn,
     });
 
     // Respond with the user data and JWT token
@@ -89,7 +92,6 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
-
 
 // ------------- Protected Route (example: dashboard) -------------
 app.get(routes.dashboard, verifyToken, (req, res) => {

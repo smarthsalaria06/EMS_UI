@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, Container, Paper, IconButton } from '@mui/material';
+import { Box, Button, TextField, Typography, Container, Paper, IconButton, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { AccountCircle, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
@@ -12,12 +12,19 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [error, setError] = useState(''); // To handle login errors
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // To handle loading state
 
   const handleLogin = () => {
-    // Send login request to the server with username and password
-    console.log('Logging in with:', { username, password });
-  
+    if (!username || !password) {
+      setError('Please enter both username and password.');
+      return;
+    }
+
+    setError('');
+    setLoading(true); // Start loading when login is triggered
+
+    setTimeout(() => {
     fetch('http://localhost:5000/login', {
       method: 'POST',
       headers: {
@@ -28,37 +35,30 @@ const Login = () => {
         password: password,
       }),
     })
-    .then((response) => {
-      if (!response.ok) {
-        console.log("Raw Response:", response);
-        return response.json().then(err => {
-          console.log("Error details:", err);  // Add logging to inspect error structure
-          throw new Error(err.message || 'Invalid credentials');
-        });
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data.success) {
-        console.log("Parsed Data:", data);
-        
-      
-        login(data.user, data.token); // ✅ Pass both user and token
-        navigate('/dashboard');
-      } else {
-        setError(data.message || 'Login failed'); // Show backend error message
-      }
-    })
-    .catch((err) => {
-      console.error('Login failed:', err);
-      setError(err.message || 'Something went wrong. Please try again later.');
-    });
-  
-  
-  
-  };
+      .then((response) => {
+        setLoading(true); // Stop loading after receiving response
+        if (!response.ok) {
+          return response.json().then((err) => {
+            throw new Error(err.message || 'Invalid credentials');
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          login(data.user, data.token); // ✅ Pass both user and token
+          navigate('/dashboard/home');
+        } else {
+          setError(data.message || 'Login failed'); // Show backend error message
+        }
+      })
+      .catch((err) => {
+        setLoading(false); // Stop loading in case of error
+        setError(err.message || 'Something went wrong. Please try again later.');
+      });
+  }, 1500);
+};
 
-  // Toggle password visibility
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   return (
@@ -183,8 +183,9 @@ const Login = () => {
               },
             }}
             onClick={handleLogin}
+            disabled={loading} // Disable the button when loading
           >
-            Login
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
           </Button>
 
           {/* Error Message */}
