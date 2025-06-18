@@ -1,0 +1,207 @@
+/* SLD.css */
+
+.sld-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.sld-diagram {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.sld-asset {
+  cursor: pointer;
+  text-align: center;
+}
+
+.sld-box {
+  background: #eef4fa;
+  border: 2px solid #007bff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  min-width: 100px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.sld-box:hover {
+  transform: scale(1.05);
+  background-color: #dbefff;
+}
+
+/* Asset type specific styles */
+.sld-breaker .sld-box {
+  border-color: #ff9800;
+}
+.sld-tx .sld-box {
+  border-color: #4caf50;
+}
+.sld-pcs .sld-box {
+  border-color: #f44336;
+}
+.sld-battery .sld-box {
+  border-color: #3f51b5;
+}
+
+/* Popup styles */
+.sld-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.sld-popup-content {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  min-width: 300px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+.sld-container {
+  padding: 20px;
+}
+
+.sld-diagram {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  justify-content: center;
+}
+
+.sld-asset {
+  cursor: pointer;
+  text-align: center;
+}
+
+.sld-box {
+  padding: 15px 20px;
+  border: 2px solid #1976d2;
+  border-radius: 10px;
+  background-color: #f0f8ff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+.sld-box:hover {
+  transform: scale(1.05);
+  background-color: #e3f2fd;
+}
+
+.sld-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.sld-popup-content {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  width: 300px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #333;
+}
+
+/* Additional styles for SLD connections */
+
+.sld-diagram {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow-x: auto;
+  gap: 40px;
+  padding: 40px 20px;
+}
+
+/* Draw line between items */
+.sld-asset {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Horizontal connector line */
+.sld-asset:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  width: 40px;
+  height: 2px;
+  background-color: #1976d2;
+  z-index: 0;
+}
+
+/* Vertical dotted lines (optional for device blocks) */
+.sld-box::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  height: 20px;
+  width: 2px;
+  background-color: #ccc;
+  transform: translateX(-50%);
+  display: none; /* Enable if vertical needed */
+}
+
+.sld-box {
+  padding: 16px 20px;
+  border: 2px solid #1976d2;
+  border-radius: 10px;
+  background-color: white;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  min-width: 130px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+}

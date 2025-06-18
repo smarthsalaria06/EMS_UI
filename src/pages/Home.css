@@ -1,0 +1,103 @@
+/* === Dashboard Page === */
+.home-dashboard {
+  padding: 24px;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* === Title === */
+.home-dashboard h4 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #2c3e50;
+}
+
+/* === Metrics Section === */
+.metrics-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+/* === Individual Metric Card === */
+.metric-card {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.metric-card .label {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 6px;
+}
+
+.metric-card .value {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.metric-card svg {
+  font-size: 26px;
+}
+
+/* === Graph Section === */
+.graph-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: space-between;
+}
+
+.graph-card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 62px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  flex: 1 1 48%;
+  min-width: 820px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.graph-card h6 {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: #34495e;
+}
+
+/* === Responsive Adjustments === */
+@media (max-width: 1024px) {
+  .graph-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-dashboard h4 {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .metric-card .value {
+    font-size: 18px;
+  }
+
+  .graph-card h6 {
+    text-align: center;
+  }
+}

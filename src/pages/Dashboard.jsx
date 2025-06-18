@@ -9,12 +9,11 @@ import LiveMetrics from '../components/LiveMetrics';
 import LeftSidebar from '../components/LeftSidebar';
 import ThemeToggle from '../components/ThemeToggle';
 import ErrorBoundary from '../components/ErrorBoundary';
-import SessionExpirePopup from '../components/SessionExpirePopup'; // Import the SessionExpirePopup
 import './Dashboard.css';
 import { Outlet } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { user, logout, sessionExpired, timeRemaining, renewSession } = useAuth();
+  const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [theme, setTheme] = useState('light');
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
@@ -32,15 +31,14 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleAvatarClick = (event) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
+
   const handleLogout = () => {
     sessionStorage.removeItem('authToken');
     sessionStorage.removeItem('user');
@@ -53,15 +51,7 @@ const Dashboard = () => {
     return name.trim().split(' ').map((n) => n[0].toUpperCase()).join('');
   };
 
-  const updateTheme = (newTheme) => setTheme(newTheme);
-
-  const handleSidebarToggle = () => {
-    setIsSidebarExpanded((prev) => !prev);
-  };
-
-  // Display session time remaining in minutes and seconds
-  const minutes = Math.floor(timeRemaining / 60000);
-  const seconds = Math.floor((timeRemaining % 60000) / 1000);
+  const handleSidebarToggle = () => setIsSidebarExpanded(prev => !prev);
 
   return (
     <div className={`dashboard-container ${theme}`}>
@@ -77,15 +67,6 @@ const Dashboard = () => {
         <div className="software-name">
           <h2>Energy Management System</h2>
         </div>
-        
-        <div className="session-timer">
-          {sessionExpired ? (
-            <span>Session Expired</span>
-          ) : (
-            <span>Session Remaining: {minutes}:{seconds < 10 ? '0' : ''}{seconds}</span>
-          )}
-        </div>
-
         <div className="user-profile">
           <IconButton onClick={handleAvatarClick} className="user-avatar-button">
             {user?.photoURL ? (
@@ -119,9 +100,6 @@ const Dashboard = () => {
           </ErrorBoundary>
         )}
       </div>
-
-      {/* Show the session expiry popup when session is expired */}
-      {sessionExpired && <SessionExpirePopup renewSession={renewSession} logout={handleLogout} />}
     </div>
   );
 };

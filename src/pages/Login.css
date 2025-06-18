@@ -76,8 +76,8 @@ body {
 
 /* Responsive Logo */
 .login-logo {
-  width: 120px;
-  margin-bottom: 10px;
+  width: 0px;
+  margin-bottom: 0px;
 }
 
 /* Typography adjustments */
@@ -97,7 +97,7 @@ body {
   }
 
   .login-logo {
-    width: 90px;
+    width: 0px;
   }
 
   .login-title {

@@ -2,5 +2,5 @@
   "login": "/login",
   "dashboard": "/dashboard",
   "users": "/users",
-  "fallback": "/"
+  "fallback": "*"
 }

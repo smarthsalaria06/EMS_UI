@@ -10,7 +10,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  pointer-events: none; /* Prevent interaction with page */
+
+  /* ✅ Ensure the whole overlay blocks interaction with background */
+  pointer-events: auto;
 }
 
 /* Popup box */
@@ -24,6 +26,7 @@
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   pointer-events: auto; /* Allow interaction with popup */
   font-family: 'Roboto', sans-serif;
+  z-index: 10000; /* ensure it's above the overlay */
 }
 
 /* Header for the popup */
@@ -84,3 +87,18 @@
 .ok:hover {
   background-color: #1976d2;
 }
+
+.session-popup {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.popup-subtext {
+  font-size: 14px;
+  color: #cc0000;
+  margin-top: 10px;
+}
+

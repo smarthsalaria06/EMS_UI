@@ -18,6 +18,8 @@ import CompanyLogo from '../assets/company-logo.png';
 import CompanyBackground from '../assets/company-background.png';
 
 const Login = () => {
+  console.debug('[Login] Component loaded');
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -30,13 +32,18 @@ const Login = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleLogin = () => {
+    console.debug('[handleLogin] Invoked');
+    console.debug(`[handleLogin] Username: ${username}, Password: ${password}`);
+
     if (!username || !password) {
+      console.warn('[handleLogin] Empty credentials');
       setError('Please enter both username and password.');
       return;
     }
 
     setError('');
     setLoading(true);
+    console.debug('[handleLogin] Sending request to backend...');
 
     setTimeout(() => {
       fetch('http://localhost:5000/login', {
@@ -45,30 +52,40 @@ const Login = () => {
         body: JSON.stringify({ username, password }),
       })
         .then((response) => {
+          console.debug('[fetch] Response received');
           if (!response.ok) {
             return response.json().then((err) => {
+              console.error('[fetch] Login error response:', err);
               throw new Error(err.message || 'Invalid credentials');
             });
           }
           return response.json();
         })
         .then((data) => {
+          console.debug('[fetch] Login success:', data);
           setLoading(false);
           if (data.success) {
+            console.info('[Login] Login successful. Redirecting to /dashboard/home...');
             login(data.user, data.token);
             navigate('/dashboard/home');
           } else {
+            console.warn('[Login] Login failed:', data.message);
             setError(data.message || 'Login failed');
           }
         })
         .catch((err) => {
+          console.error('[Login] Error during fetch:', err);
           setLoading(false);
           setError(err.message || 'Something went wrong. Please try again later.');
         });
     }, 1500);
   };
 
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleClickShowPassword = () => {
+    const newValue = !showPassword;
+    console.debug(`[handleClickShowPassword] Toggling password visibility to: ${newValue}`);
+    setShowPassword(newValue);
+  };
 
   return (
     <div
@@ -112,8 +129,8 @@ const Login = () => {
             <img
               src={CompanyLogo}
               alt="Company Logo"
-              className="login-logo" 
-              style={{ width: isMobile ? '120px' : '150px', marginBottom: '10px' }}
+              className="login-logo"
+              style={{ width: isMobile ? '120px' : '200px', marginBottom: '10px' }}
             />
             <Typography
               variant="h6"
@@ -133,7 +150,10 @@ const Login = () => {
             fullWidth
             margin="normal"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => {
+              console.debug(`[onChange] Username updated to: ${e.target.value}`);
+              setUsername(e.target.value);
+            }}
             sx={{
               '& .MuiInputBase-root': {
                 borderRadius: 4,
@@ -159,7 +179,10 @@ const Login = () => {
             fullWidth
             margin="normal"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              console.debug(`[onChange] Password updated`);
+              setPassword(e.target.value);
+            }}
             sx={{
               '& .MuiInputBase-root': {
                 borderRadius: 4,

@@ -30,7 +30,7 @@ const AboutPage = ({ open, onClose }) => {
 
       <DialogContent dividers>
         <Typography variant="body1" gutterBottom>
-          © 2025 ANVI POWER INDUSTRIES PVT. LTD.
+          © 2025 PREMIER ENERGIES STORAGE SOLUTIONS PVT. LTD.
         </Typography>
         <Typography variant="body1" gutterBottom>
           ENERGY MANAGEMENT SYSTEM

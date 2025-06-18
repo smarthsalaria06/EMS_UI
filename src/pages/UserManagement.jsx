@@ -24,7 +24,7 @@ const getAuthConfig = () => {
   const token = sessionStorage.getItem('authToken');
   return {
     headers: {
-      Authorization: token ? `Bearer ${token}` : ''
+      Authorization: token ? `Bearer ${token}` : '',
     }
   };
 };
@@ -45,14 +45,23 @@ const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/users', getAuthConfig());
+      const config = getAuthConfig();
+      console.log('Fetching users with headers:', config);
+      const res = await axios.get('http://localhost:5000/debug-users');
+
+
       if (Array.isArray(res.data)) {
         setUsers(res.data);
       } else {
         console.error('Invalid response format:', res.data);
+        showSnackbar('Unexpected data received from server.', 'error');
       }
     } catch (err) {
-      console.error('Error fetching users:', err.response?.data || err.message);
+      console.error('Error fetching users:', {
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+      });
       showSnackbar('Failed to fetch users. Please login again or try later.', 'error');
     }
   };
@@ -98,6 +107,7 @@ const UserManagement = () => {
     }
 
     try {
+      const config = getAuthConfig();
       if (editingUser) {
         const payload = { ...formData };
         if (!formData.password) delete payload.password;
@@ -105,11 +115,11 @@ const UserManagement = () => {
         await axios.put(
           `http://localhost:5000/users/${editingUser.id}`,
           payload,
-          getAuthConfig()
+          config
         );
         showSnackbar('User updated successfully.', 'success');
       } else {
-        await axios.post('http://localhost:5000/users', formData, getAuthConfig());
+        await axios.post('http://localhost:5000/users', formData, config);
         showSnackbar('User created successfully.', 'success');
       }
       handleClose();
@@ -133,9 +143,9 @@ const UserManagement = () => {
   };
 
   const filteredUsers = users.filter(user =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleExportCSV = () => {
@@ -203,7 +213,7 @@ const UserManagement = () => {
                 <TableCell>{user.username}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.role}</TableCell>
-                <TableCell>{user.access?.join(', ')}</TableCell>
+                <TableCell>{(user.access || []).join(', ')}</TableCell>
                 <TableCell>
                   <IconButton onClick={() => handleOpen(user)}><EditIcon /></IconButton>
                   <IconButton onClick={() => handleDelete(user.id)}><DeleteIcon /></IconButton>
@@ -265,7 +275,7 @@ const UserManagement = () => {
         </Box>
       </Modal>
 
-      {/* Snackbar Alerts */}
+      {/* Snackbar */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={4000}

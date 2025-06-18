@@ -21,7 +21,7 @@ const NotFound = () => {
         </div>
       </div>
       <div className="notfound-box">
-        <img src={CompanyLogo} alt="company-logo" className="company-logo" />
+        <img src={CompanyLogo} alt="company-logo" className="company-logo" height={400} />
         <h1 className="notfound-title">404</h1>
         <p className="notfound-text">Oops! The page you're looking for doesn't exist.</p>
         <button className="notfound-button" onClick={() => navigate('/login')}>

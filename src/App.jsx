@@ -7,6 +7,7 @@ import NotFound from './pages/NotFound';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import SessionExpirePopup from './components/SessionExpirePopup'; // <- Make sure this is imported
 import Home from './pages/Home';
+import SLD from './pages/SLD';
 import Alarms from './pages/Alarms';
 import Analytics from './pages/Analytics';
 import BESS from './pages/BESS';
@@ -25,17 +26,22 @@ const AppContent = () => {
     document.body.setAttribute('data-theme', theme);
   }, [theme]);
 
+  
+
   return (
     <>
       <CssBaseline />
       
       {/* ✅ Always rendered on top-level, outside routes */}
       <SessionExpirePopup />
-
+      
       <Routes>
+        
+
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<DashboardWrapper />}>
           <Route path="home" element={<Home />} />
+          <Route path="sld" element={<SLD />} />
           <Route path="pcs" element={<PCS />} />
           <Route path="bess" element={<BESS />} />
           <Route path="network" element={<Network />} />

@@ -68,7 +68,7 @@
 
 /* === Right Sidebar === */
 .right-sidebar {
-  width: 300px;
+  width: 420px; /* Increased width from 300px */
   background: #f9fafc;
   padding: 10px; 
   margin-top: -10px;
@@ -78,11 +78,15 @@
   flex-direction: column;
   justify-content: space-between;
 }
+.right-sidebar {
+  width: clamp(350px, 25%, 500px); /* 25% of screen, between 350px and 500px */
+}
+
 
 /* === Misc === */
 .company-logo {
   object-fit: contain;
-  ;
+  padding-left: 40px;
   max-height: 40px;
 }
 
