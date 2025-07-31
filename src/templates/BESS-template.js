@@ -1,27 +1,29 @@
 export const bess_layout = [
-  { i: 'Voltage', x: 0, y: 0, w: 2, h: 2 },
-  { i: 'Current', x: 2, y: 0, w: 2, h: 2 },
-  { i: 'Power', x: 4, y: 0, w: 2, h: 2 },
-  { i: 'Agg-1', x: 0, y: 2, w: 2, h: 2 },
-  { i: 'Agg-2', x: 2, y: 2, w: 2, h: 2 },
-  { i: 'Agg-3', x: 4, y: 2, w: 2, h: 2 }
+  { i: 'Energy Available', x: 0, y: 0, w: 2, h: 2 ,vis:"Dial"},
+  { i: 'Avg SOH', x: 2, y: 0, w: 2, h: 2 ,vis:"Dial"},
+  { i: 'Active Container', x: 4, y: 0, w: 2, h: 2, vis:"Text" },
+  { i: 'Active Faults', x: 0, y: 2, w: 2, h: 2 ,vis:"Fault"},
+  { i: 'Avg Voltage vs Time', x: 2, y: 2, w: 2, h: 2, vis:"Graph" },
+  { i: 'Avg SOC', x: 4, y: 2, w: 2, h: 2,vis:"Dial" }
 ]
 export const cont_layout = [
-    { i: 'Agg-1', x: 0, y: 0, w: 2, h: 1 },
-    { i: 'Agg-2', x: 2, y: 0, w: 2, h: 1 },
-    { i: 'Agg-3', x: 4, y: 0, w: 2, h: 1 },
-    { i: 'Agg-4', x: 0, y: 2, w: 2, h: 1 },
-    { i: 'Agg-5', x: 2, y: 2, w: 2, h: 1 },
-    { i: 'Agg-6', x: 4, y: 2, w: 2, h: 1 },
-    { i: 'Agg-7', x: 0, y: 4, w: 2, h: 1 },
-    { i: 'Agg-8', x: 2, y: 4, w: 2, h: 1 },
-    { i: 'Agg-9', x: 4, y: 4, w: 2, h: 1 },
-    { i: 'Agg-10', x: 0, y: 6, w: 2, h: 1 },
-    { i: 'Agg-11', x: 2, y: 6, w: 2, h: 1 },
-    { i: 'Agg-12', x: 4, y: 6, w: 2, h: 1 },
-    { i: 'Agg-13', x: 0, y: 8, w: 2, h: 1 },
-    { i: 'Agg-14', x: 2, y: 8, w: 2, h: 1 },
-    { i: 'Agg-15', x: 4, y: 8, w: 2, h: 1 }
+    { i: 'Container-1',x:0,y:0, w: 2, h: 1 },
+    { i: 'Container-2',x:2,y:0, w: 2, h: 1 },
+    { i: 'Container-3', w: 2, h: 1 },
+    { i: 'Container-4', w: 2, h: 1 },
+    { i: 'Container-5', w: 2, h: 1 },
+    { i: 'Container-6', w: 2, h: 1 },
+    { i: 'Container-7', w: 2, h: 1 },
+    { i: 'Container-8', w: 2, h: 1 },
+    { i: 'Container-9', w: 2, h: 1 },
+    { i: 'Container-10', w: 2, h: 1 },
+    { i: 'Container-11', w: 2, h: 1 },
+    { i: 'Container-12', w: 2, h: 1 },
+    { i: 'Container-13', w: 2, h: 1 },
+    { i: 'Container-14', w: 2, h: 1 },
+    { i: 'Container-15', w: 2, h: 1 },
+    { i: 'Container-16', w: 2, h: 1 }
+    
 ]
 
 // export { bess_layout, cont_layout };
