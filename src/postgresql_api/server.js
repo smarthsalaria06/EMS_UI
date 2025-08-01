@@ -28,12 +28,15 @@ const pool = new Pool({
 const verifyToken = (req, res, next) => {
   const tokenHeader = req.headers['authorization'];
   const token = tokenHeader?.split(' ')[1];
-
+  console.log("🔐 Received token:", token);
   if (!token) return res.status(403).json({ success: false, message: 'Token is missing' });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err || decoded.sessionExpiryTime < Date.now()) {
-      return res.status(403).json({ success: false, message: 'Invalid or expired token' });
+    if (err) {
+      return res.status(403).json({ success: false, message: 'Invalid token' });
+    }
+    if (decoded.sessionExpiryTime && decoded.sessionExpiryTime < Date.now()) {
+      return res.status(403).json({ success: false, message: 'Session expired' });
     }
     req.user = decoded;
     next();
@@ -64,7 +67,10 @@ app.post('/api/login', async (req, res) => {
     const accessRes = await pool.query('SELECT access_key FROM user_access WHERE user_id = $1', [user.id]);
     const access = accessRes.rows.map(r => r.access_key);
 
-    const sessionExpiryTime = Date.now() + (process.env.TOKEN_EXPIRY || 30 * 60 * 1000);
+    const sessionExpiryTime = Date.now() + parseInt(process.env.SESSION_EXPIRY_MS || '1800000');
+
+
+
     const token = jwt.sign(
       { id: user.id, username: user.username, sessionExpiryTime },
       process.env.JWT_SECRET,
@@ -157,6 +163,28 @@ app.delete('/api/users/:id', verifyToken, async (req, res) => {
     res.status(500).json({ success: false });
   }
 });
+
+app.get('/api/metrics', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM dummy_data');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching metrics:', err);
+    res.status(500).json({ error: 'Failed to fetch metrics' });
+  }
+});
+
+app.get('/api/alarms', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM alarms ORDER BY timestamp DESC');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching alarms:', err);
+    res.status(500).json({ error: 'Failed to fetch alarms' });
+  }
+});
+
+
 
 // Access rights list
 app.get('/api/access-rights', verifyToken, async (req, res) => {
