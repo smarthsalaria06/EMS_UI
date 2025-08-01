@@ -1,156 +1,86 @@
-import { Chart, registerables } from 'chart.js';
+import React from 'react';
 
-Chart.register(...registerables);
+// Dial Widget
+export const DialWidget = ({ title, value = 0, min = 0, max = 100 }) => {
+  const size = 100;
+  const radius = 40;
+  const stroke = 10;
+  const percent = (Math.max(min, Math.min(max, value)) - min) / (max - min);
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference * (1 - percent);
 
-export function createChartWidget(chartId) {
-  const item = document.createElement('div');
-  item.classList.add('grid-stack-item');
-  item.style.overflowY = "auto";
-  item.style.maxHeight = "805px";
-  item.style.overflow = "hidden";
-  item.dataset.gsX = 0;
-  item.dataset.gsY = 0;
-  item.dataset.gsWidth = 3;
-  item.dataset.gsHeight = 2;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+      <svg width={size} height={size}>
+        <circle cx={size / 2} cy={size / 2} r={radius} stroke="#eee" strokeWidth={stroke} fill="none" />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke="#1976d2"
+          strokeWidth={stroke}
+          fill="none"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
+        />
+        <text x={size / 2} y={size / 2 + 8} textAnchor="middle" fontSize="20" fill="#333">
+          {value}
+        </text>
+      </svg>
+      <div style={{ fontSize: 16, marginTop: 8 }}>{title}</div>
+    </div>
+  );
+};
 
-  const chartContainer = document.createElement('div');
-  chartContainer.id = chartId;
-  chartContainer.classList.add('grid-stack-item-content');
-  chartContainer.style.overflow = "hidden";
-  item.appendChild(chartContainer);
+// Tile Widget
+export const TileWidget = ({ title, value }) => (
+  <div style={{ padding: 16, textAlign: 'center', position: 'relative' }}>
+    <div style={{ fontWeight: 'bold', fontSize: 18, top: 0}}>{title}</div>
+    <div style={{ fontSize: 24, color: '#1976d2', marginTop: 8 }}>{value}</div>
+  </div>
+)
 
-  const canvas = document.createElement('canvas');
-  chartContainer.appendChild(canvas);
-  const ctx = canvas.getContext('2d');
+// Faults Widget
+export const FaultsWidget = ({ faults = [] }) => (
+  <div style={{
+    padding: 16,
+    background: '#fff',
+    borderRadius: 8,
+    boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+    minWidth: 220,
+    maxHeight: 180,
+    overflowY: 'auto'
+  }}>
+    <div style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 8, color: '#d32f2f' }}>
+      Active Faults: {faults.length}
+    </div>
+    <ul style={{ paddingLeft: 18, margin: 0 }}>
+      {faults.map((fault, idx) => (
+        <li key={idx} style={{ color: '#d32f2f', fontSize: 15, marginBottom: 4 }}>
+          {fault}
+        </li>
+      ))}
+      {faults.length === 0 && (
+        <li style={{ color: '#388e3c', fontSize: 15 }}>No active faults</li>
+      )}
+    </ul>
+  </div>
+);
 
-  // Initialize with empty arrays but with fixed size
-  const maxDataPoints = 10;
-  const initialData = Array(maxDataPoints).fill(null);
-  const initialLabels = Array(maxDataPoints).fill('');
+// Chart Widget (example, you can use chart.js or recharts here)
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
-  const chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: initialLabels,
-      datasets: [{
-        label: chartId,
-        data: initialData,
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        fill: false,
-        tension: 0.4 // Add slight curve to line
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        x: {
-          type: 'category',
-          display: true,
-          ticks: {
-            autoSkip: true,
-            maxTicksLimit: 10
-          }
-        },
-        y: {
-          beginAtZero: true,
-          suggestedMin: 0,
-          suggestedMax: 100
-        }
-      },
-      animation: {
-        duration: 0
-      },
-      plugins: {
-        legend: {
-          display: true,
-          position: 'top'
-        }
-      }
-    }
-  });
-
-  // Store the chart instance directly on the container
-  chartContainer.chart = chart;
-  
-  return item;
-}
-
-export function updateChart(obj, chartId) {
-  const chartContainer = document.getElementById(chartId);
-  
-  if (!chartContainer) {
-    console.warn(`Chart container with ID "${chartId}" not found.`);
-    return;
-  }
-
-  const chart = chartContainer.chart;
-  
-  if (!chart) {
-    console.warn(`Chart instance not found for "${chartId}".`);
-    return;
-  }
-
-  // Remove oldest data point and add new one
-  chart.data.labels.shift();
-  chart.data.labels.push(obj.timestamp);
-  
-  chart.data.datasets[0].data.shift();
-  chart.data.datasets[0].data.push(obj.data);
-
-  // Ensure we're not exceeding our fixed size
-  const maxDataPoints = 10;
-  while (chart.data.labels.length > maxDataPoints) {
-    chart.data.labels.shift();
-    chart.data.datasets[0].data.shift();
-  }
-
-  // Force a complete redraw of the chart
-  chart.update('none'); // Use 'none' mode for immediate update
-}
-
-// Rest of the code remains the same...
-export function createTileWidget(title) {
-  const item = document.createElement('div');
-  item.classList.add('grid-stack-item');
-  item.style.overflow = "hidden";
-  item.style.maxHeight = "805px";
-  item.dataset.gsX = 0; 
-  item.dataset.gsY = 0;
-  item.dataset.gsWidth = 2;
-  item.dataset.gsHeight = 2;
-  
-  const tile = document.createElement('div');
-  tile.className = "grid-stack-item-content";
-  tile.style.display = "flex";
-  tile.style.flexDirection = "column";
-  tile.style.fontSize = "18px";
-  tile.style.fontWeight = "700";
-  tile.style.margin = "0";
-  tile.style.alignItems = "center";
-  tile.textContent = title;
-  tile.style.backgroundColor = 'white';
-    
-  item.appendChild(tile);
-  const tileName = document.createElement('div');
-  tileName.className = "tileName";
-  tileName.id = title;
-  tileName.style.fontFamily = "DM Sans, sans-serif";
-  tileName.style.paddingTop = "10px";
-  tileName.textContent = "ABCD";
-  
-  tile.appendChild(tileName);
-  return item;
-}
-
-export function updateTileWidget(title, newValue) {
-  const tileName = document.getElementById(title);
-  if (tileName) {
-    tileName.textContent = newValue;
-  } else {
-    console.error(`Tile with title ${title} not found`);
-  }
-}
-
-export default { createChartWidget, createTileWidget, updateTileWidget, updateChart };
+export const ChartWidget = ({ title, data, dataKey = "value" }) => (
+  <div style={{ width: '100%', height: 180 }}>
+    <div style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 8 }}>{title}</div>
+    <ResponsiveContainer width="100%" height={140}>
+      <LineChart data={data}>
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Line type="monotone" dataKey={dataKey} stroke="#1976d2" strokeWidth={2} />
+      </LineChart>
+    </ResponsiveContainer>
+  </div>
+);

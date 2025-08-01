@@ -1,11 +1,14 @@
+
 export const bess_layout = [
-  { i: 'Energy Available', x: 0, y: 0, w: 2, h: 2 ,vis:"Dial"},
-  { i: 'Avg SOH', x: 2, y: 0, w: 2, h: 2 ,vis:"Dial"},
-  { i: 'Active Container', x: 4, y: 0, w: 2, h: 2, vis:"Text" },
-  { i: 'Active Faults', x: 0, y: 2, w: 2, h: 2 ,vis:"Fault"},
-  { i: 'Avg Voltage vs Time', x: 2, y: 2, w: 2, h: 2, vis:"Graph" },
-  { i: 'Avg SOC', x: 4, y: 2, w: 2, h: 2,vis:"Dial" }
-]
+  { i: 'Energy Available', x: 0, y: 0, w: 2, h: 3, vis: 'Dial', key: 'energyAvailable' },
+  { i: 'Avg SOH', x: 2, y: 0, w: 2, h: 3, vis: 'Dial', key: 'avgSOH' },
+  { i: 'Active Container', x: 4, y: 0, w: 2, h: 3, vis: 'Tile', key: 'activeContainer' },
+  { i: 'Active Faults', x: 0, y: 2, w: 2, h: 3, vis: 'Fault', key: 'faults' },
+  { i: 'Avg Voltage vs Time', x: 2, y: 2, w: 2, h: 3, vis: 'Chart', key: 'avgVoltageData' },
+  { i: 'Avg SOC', x: 4, y: 2, w: 2, h: 3, vis: 'Dial', key: 'avgSOC' },
+
+];
+
 export const cont_layout = [
     { i: 'Container-1',x:0,y:0, w: 2, h: 1 },
     { i: 'Container-2',x:2,y:0, w: 2, h: 1 },
