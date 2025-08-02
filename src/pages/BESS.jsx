@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
@@ -104,23 +105,29 @@ const BESS = () => {
           }}
         >
           {cont_layout.map((item) => (
-            <div
+            <Link
               key={item.i}
-              style={{
-                minHeight: 150,
-                minWidth: 200,
-                border: "1px solid #ccc",
-                borderRadius: 8,
-                background: "#fff",
-                padding: 12,
-                textAlign: "center",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-              }}
+              to={`/dashboard/BESS/${encodeURIComponent(item.i)}`}
+              style={{ textDecoration: 'none', color: 'inherit' }}
             >
-              <strong>{item.i}</strong>
-              <div style={{ fontSize: 12, color: "#888" }}></div>
-            </div>
-          ))}
+              <div
+                style={{
+                  minHeight: 150,
+                  minWidth: 200,
+                  border: '1px solid #ccc',
+                  borderRadius: 8,
+                  background: '#fff',
+                  padding: 12,
+                  textAlign: 'center',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+                  transition: '0.2s',
+                }}
+              >
+                <strong>{item.i}</strong>
+                <div style={{ fontSize: 12, color: '#888' }}></div>
+              </div>
+            </Link>
+        ))}
         </div>
       </div>
 

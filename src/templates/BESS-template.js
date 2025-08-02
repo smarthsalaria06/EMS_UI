@@ -10,22 +10,22 @@ export const bess_layout = [
 ];
 
 export const cont_layout = [
-    { i: 'Container-1',x:0,y:0, w: 2, h: 1 },
-    { i: 'Container-2',x:2,y:0, w: 2, h: 1 },
-    { i: 'Container-3', w: 2, h: 1 },
-    { i: 'Container-4', w: 2, h: 1 },
-    { i: 'Container-5', w: 2, h: 1 },
-    { i: 'Container-6', w: 2, h: 1 },
-    { i: 'Container-7', w: 2, h: 1 },
-    { i: 'Container-8', w: 2, h: 1 },
-    { i: 'Container-9', w: 2, h: 1 },
-    { i: 'Container-10', w: 2, h: 1 },
-    { i: 'Container-11', w: 2, h: 1 },
-    { i: 'Container-12', w: 2, h: 1 },
-    { i: 'Container-13', w: 2, h: 1 },
-    { i: 'Container-14', w: 2, h: 1 },
-    { i: 'Container-15', w: 2, h: 1 },
-    { i: 'Container-16', w: 2, h: 1 }
+    { i: 'PESSPL-1',x:0,y:0, w: 2, h: 1 },
+    { i: 'PESSPL-2',x:2,y:0, w: 2, h: 1 },
+    { i: 'PESSPL-3', w: 2, h: 1 },
+    { i: 'PESSPL-4', w: 2, h: 1 },
+    { i: 'PESSPL-5', w: 2, h: 1 },
+    { i: 'PESSPL-6', w: 2, h: 1 },
+    { i: 'PESSPL-7', w: 2, h: 1 },
+    { i: 'PESSPL-8', w: 2, h: 1 },
+    { i: 'PESSPL-9', w: 2, h: 1 },
+    { i: 'PESSPL-10', w: 2, h: 1 },
+    { i: 'PESSPL-11', w: 2, h: 1 },
+    { i: 'PESSPL-12', w: 2, h: 1 },
+    { i: 'PESSPL-13', w: 2, h: 1 },
+    { i: 'PESSPL-14', w: 2, h: 1 },
+    { i: 'PESSPL-15', w: 2, h: 1 },
+    { i: 'PESSPL-16', w: 2, h: 1 }
     
 ]
 

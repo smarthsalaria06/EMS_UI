@@ -84,3 +84,20 @@ export const ChartWidget = ({ title, data, dataKey = "value" }) => (
     </ResponsiveContainer>
   </div>
 );
+
+export const renderWidget = (type, key, title) => {
+    const value = widgetData[key];
+
+    switch (type) {
+      case "Dial":
+        return <DialWidget value={value} title={title} min={0} max={100} />;
+      case "Chart":
+        return <ChartWidget data={value} title={title} />;
+      case "Tile":
+        return <TileWidget value={value} title={title} />;
+      case "Fault":
+        return <FaultsWidget faults={value} />;
+      default:
+        return <div>Unknown widget</div>;
+    }
+  };
